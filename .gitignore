@@ -1,0 +1,6 @@
+.cache
+.json
+build
+compile_commands.json
+# main.cc暂时用来测试
+main.cc 
