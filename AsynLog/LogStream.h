@@ -1,51 +1,92 @@
 #ifndef LOGSTREAM
 #define LOGSTREAM
+
+/*重载 >> ,并且定义迭代器
+type -> string
+*/
+
 #include "Types.h"
 #include "noncopyable.h"
+#include "FixedBuffer.h"
 #include <cstddef>
 #include <string>
-#endif /* LOGSTREAM */
-template <int SIZE> class FixedBuffer : noncopyable {
+#include <pcre_stringpiece.h>
+
+class LogStream : noncopyable {
+    typedef LogStream self;
+
 public:
-  FixedBuffer() : cur_(data_) { setCookie(cookieStart()); };
-  ~FixedBuffer() { setCookie(cookieEnd()); }
+    typedef FixedBuffer<kSmallBuffer> Buffer;
+    // 对<<(输入符号的重载)
+    self& operator<<(bool v);
+    self& operator<<(short);
+    self& operator<<(unsigned short);
+    self& operator<<(int);
+    self& operator<<(unsigned int);
+    self& operator<<(long);
+    self& operator<<(unsigned long);
+    self& operator<<(long long);
+    self& operator<<(unsigned long long);
+    self& operator<<(const void*);
+    self& operator<<(float v);
+    self& operator<<(double);
+    self& operator<<(char v);
+    self& operator<<(const char* str);
+    self& operator<<(const unsigned char* str);
+    self& operator<<(const std::string& v);
+    self& operator<<(const pcrecpp::StringPiece& v);
+    self& operator<<(const Buffer& v);
 
-  // 将数据写入缓冲区
-  void append(const char *buf, size_t len) {
-    if (avail() > len) {
-      memcpy(cur_, buf, len);
-      cur_ += len;
+    void append(const char* data, int len) {
+        buffer_.append(data, len);
     }
-  }
-
-  // 返回缓冲区首地址
-  const char *data() const { return data_; }
-  // 返回缓冲区长度
-  int length() const { return static_cast<int>(cur_ - data_); }
-  // 返回缓冲区当前位置
-  char *current() { return cur_; }
-  // 返回空闲缓冲区长度
-  int avail() const { return static_cast<int>(end() - cur_); }
-  // 增加已写入数据的长队,(cur指针往后移)
-  void add(size_t len) { cur_ += len; }
-  // 重置缓冲区(将cur_重新指向开头)
-  void reset() { cur_ = data_; }
-  // 将缓冲区全置空
-  void bzero() { memZero(data_, sizeof data_); }
-
-  // for used by GDB
-  const char *debugString();
-  void setCookie(void (*cookie)()) { cookie_ = cookie; }
-  // for used by unit test
-  // 供单元测试使用
-  std::string toString() const { return string(data_, length()); }
+    const Buffer& buffer() const {
+        return buffer_;
+    }
+    void resetBuffer() {
+        buffer_.reset();
+    }
 
 private:
-  const char *end() const { return data_ + sizeof(data_); }
+    void
+    staticCheck();
 
-  static void cookieStart();
-  static void cookieEnd();
-  void (*cookie_)();
-  char data_[SIZE];
-  char *cur_;
+    // 将整形转换为字符串的模板函数
+    template <typename T>
+    void formatInteger(T);
+
+    Buffer buffer_;
+
+    // 数字的最大位数
+    static const int kMaxNumericSize = 48;
 };
+
+class Fmt // : noncopyable
+{
+public:
+    template <typename T>
+    Fmt(const char* fmt, T val);
+
+    const char* data() const {
+        return buf_;
+    }
+    int length() const {
+        return length_;
+    }
+
+private:
+    char buf_[32];
+    int length_;
+};
+
+inline LogStream& operator<<(LogStream& s, const Fmt& fmt) {
+    s.append(fmt.data(), fmt.length());
+    return s;
+}
+
+// 1000
+std::string formatSI(int64_t n);
+
+// 1024
+std::string formatIEC(int64_t n);
+#endif /* LOGSTREAM */

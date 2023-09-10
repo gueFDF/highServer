@@ -29,7 +29,7 @@ include_directories(${PROJECT_SOURCE_DIR}/AsynLog)
 include_directories(/usr/local/include)
 
 
-add_executable(main ./main.cc)
+add_executable(main ./main.cc ./AsynLog/LogStream.cc)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
  
