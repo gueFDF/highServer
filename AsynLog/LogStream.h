@@ -11,7 +11,7 @@ type -> string
 #include <cstddef>
 #include <string>
 #include <pcre_stringpiece.h>
-
+#include <cassert>
 class LogStream : noncopyable {
     typedef LogStream self;
 
@@ -65,7 +65,12 @@ class Fmt // : noncopyable
 {
 public:
     template <typename T>
-    Fmt(const char* fmt, T val);
+    Fmt(const char* fmt, T val) {
+        static_assert(std::is_arithmetic<T>::value == true, "Must be arithmetic type");
+
+        length_ = snprintf(buf_, sizeof buf_, fmt, val);
+        assert(static_cast<size_t>(length_) < sizeof buf_);
+    }
 
     const char* data() const {
         return buf_;
@@ -84,9 +89,4 @@ inline LogStream& operator<<(LogStream& s, const Fmt& fmt) {
     return s;
 }
 
-// 1000
-std::string formatSI(int64_t n);
-
-// 1024
-std::string formatIEC(int64_t n);
 #endif /* LOGSTREAM */
