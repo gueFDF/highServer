@@ -11,16 +11,21 @@ pid_t gettid() {
     return static_cast<pid_t>(::syscall(SYS_gettid));
 }
 
+
 // 线程启动后,统一调用startThread,然后在执行func
 void* startThread(void* obj) {
     ThreadData* data = static_cast<ThreadData*>(obj);
     *data->tid_ = gettid();
-    // 统治父线程启动成功,执行函数
+
+    data->latch_.set_value();
     data->func_();
 
     delete data;
     return NULL;
 }
+
+
+std::atomic_uint32_t Thread::numCreated_ = 0;
 
 void Thread::setDefaultName() {
     // fetch_add返回的是增加前的值
@@ -58,7 +63,9 @@ void Thread::start() {
         started_ = false;
         delete data;
     } else {
-        // TODO: 确保线程启动成功
+        // 获取子进程通知
+        auto rst = latch_.get_future();
+        rst.get();
     }
 }
 
