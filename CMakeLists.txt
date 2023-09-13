@@ -20,16 +20,30 @@ set(CXX_FLAGS
  -rdynamic
  )
 
+
+# 设置可执行文件输出的路径
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
-# set(LI)
+# 设置项目文件输出路径
+set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
+
+
+
+# 设置项目文件搜索路径
+link_directories(${PROJECT_SOURCE_DIR}/lib)
+link_directories(/usr/local/lib)
+
 
 # 设置编译头文件搜索路径
 include_directories(${PROJECT_SOURCE_DIR}/Utils)
 include_directories(${PROJECT_SOURCE_DIR}/AsynLog)
 include_directories(/usr/local/include)
 
+add_subdirectory(AsynLog)
 
-add_executable(main ./main.cc ./AsynLog/LogStream.cc)
+link_libraries(AsynLog)
+
+add_executable(main main.cc)
+
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
  

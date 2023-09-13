@@ -5,6 +5,7 @@
 type -> string
 */
 
+#include "SoruceFile.h"
 #include "Types.h"
 #include "noncopyable.h"
 #include "FixedBuffer.h"
@@ -12,6 +13,8 @@ type -> string
 #include <string>
 #include <pcre_stringpiece.h>
 #include <cassert>
+namespace tinyrpc {
+
 class LogStream : noncopyable {
     typedef LogStream self;
 
@@ -36,6 +39,7 @@ public:
     self& operator<<(const std::string& v);
     self& operator<<(const pcrecpp::StringPiece& v);
     self& operator<<(const Buffer& v);
+    self& operator<<(const SourceFile& v);
 
     void append(const char* data, int len) {
         buffer_.append(data, len);
@@ -48,8 +52,7 @@ public:
     }
 
 private:
-    void
-    staticCheck();
+    void staticCheck();
 
     // 将整形转换为字符串的模板函数
     template <typename T>
@@ -61,32 +64,5 @@ private:
     static const int kMaxNumericSize = 48;
 };
 
-class Fmt // : noncopyable
-{
-public:
-    template <typename T>
-    Fmt(const char* fmt, T val) {
-        static_assert(std::is_arithmetic<T>::value == true, "Must be arithmetic type");
-
-        length_ = snprintf(buf_, sizeof buf_, fmt, val);
-        assert(static_cast<size_t>(length_) < sizeof buf_);
-    }
-
-    const char* data() const {
-        return buf_;
-    }
-    int length() const {
-        return length_;
-    }
-
-private:
-    char buf_[32];
-    int length_;
-};
-
-inline LogStream& operator<<(LogStream& s, const Fmt& fmt) {
-    s.append(fmt.data(), fmt.length());
-    return s;
-}
-
+} // namespace tinyrpc
 #endif /* LOGSTREAM */

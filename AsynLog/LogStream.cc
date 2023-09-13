@@ -4,6 +4,9 @@
 #include <inttypes.h>
 #include <limits>
 #include <cassert>
+
+namespace tinyrpc {
+
 // 十进制查询表
 const char digits[] = "9876543210123456789";
 const char* zero = digits + 9;
@@ -195,3 +198,9 @@ LogStream& LogStream::operator<<(const Buffer& v) {
     *this << v.toStringPiece();
     return *this;
 }
+
+LogStream& LogStream::operator<<(const SourceFile& v) {
+    buffer_.append(v.data_, v.size_);
+    return *this;
+}
+} // namespace tinyrpc

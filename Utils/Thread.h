@@ -7,6 +7,8 @@
 #include <string>
 #include <atomic>
 #include <future>
+namespace tinyrpc {
+
 pid_t Gettid();
 class Thread : noncopyable {
 public:
@@ -47,5 +49,5 @@ public:
     pid_t* tid_;
     std::promise<void>& latch_;
 };
-
+} // namespace Thread
 #endif /* THREAD */

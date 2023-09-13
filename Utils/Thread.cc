@@ -8,13 +8,13 @@
 #include <sys/types.h>
 #include "CurrentThread.h"
 
+namespace tinyrpc {
+
 pid_t Gettid() {
     return static_cast<pid_t>(::syscall(SYS_gettid));
 }
 
 __thread int t_cachedTid = 0;
-__thread char t_tidString[32];
-__thread int t_tidStringLength = 6;
 
 // 线程启动后,统一调用startThread,然后在执行func
 void* startThread(void* obj) {
@@ -65,3 +65,4 @@ int Thread::join() {
     joined_ = true;
     return pthread_join(pthreadId_, NULL);
 }
+} // namespace tinyrpc
