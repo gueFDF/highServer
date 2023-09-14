@@ -1,12 +1,11 @@
 #include "Logging.h"
 #include "DateTime.h"
 #include "CurrentThread.h"
-
+#include "Error_no.h"
 namespace tinyrpc {
 
-__thread char t_errnobuf[512]; // 记录错误信息
-__thread char t_time[64];      // 当前线程的时间字符串“年：月：日：时：分：秒”
-__thread time_t t_lastSecond;  // 当前线程上一次日志记录时的秒数
+__thread char t_time[64];     // 当前线程的时间字符串“年：月：日：时：分：秒”
+__thread time_t t_lastSecond; // 当前线程上一次日志记录时的秒数
 
 const char* LogLevelName[Logger::NUM_LOG_LEVELS] =
     {
@@ -17,10 +16,6 @@ const char* LogLevelName[Logger::NUM_LOG_LEVELS] =
         " [ERROR] ",
         " [FATAL] ",
 };
-
-const char* strerror_tl(int savedErrno) {
-    return strerror_r(savedErrno, t_errnobuf, sizeof t_errnobuf);
-}
 
 // Impl的构造函数
 Logger::Impl::Impl(LogLevel level, int savedErrno, const SourceFile& file, int line) :
