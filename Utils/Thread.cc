@@ -1,6 +1,7 @@
 #include "Thread.h"
 #include <cassert>
 #include <errno.h>
+#include <mutex>
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/prctl.h>
@@ -22,7 +23,7 @@ void* startThread(void* obj) {
     ThreadData* data = static_cast<ThreadData*>(obj);
     *data->tid_ = gettid();
     // t_threadName=
-    data->latch_.set_value();
+    data->cond_.notify();
     data->func_();
 
     delete data;
@@ -34,7 +35,8 @@ Thread::Thread(ThreadFunc func, const std::string& n) :
     joined_(false),
     pthreadId_(0),
     tid_(0),
-    func_(std::move(func)) {
+    func_(std::move(func)),
+    latch_(mutex_) {
 }
 
 // 当主线程结束时,需要detach子线程
@@ -54,8 +56,7 @@ void Thread::start() {
         delete data;
     } else {
         // 获取子进程通知
-        auto rst = latch_.get_future();
-        rst.get();
+        latch_.wait();
     }
 }
 
