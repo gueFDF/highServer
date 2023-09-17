@@ -2,6 +2,7 @@
 #include <string>
 #include "Error_no.h"
 #include <cassert>
+#include <iostream>
 namespace tinyrpc {
 
 AppendFile::AppendFile(std::string filename) :

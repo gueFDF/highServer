@@ -82,6 +82,13 @@ void Logger::setLogLevel(Logger::LogLevel level) {
     g_logLevel = level;
 }
 
+void Logger::setOutput(OutputFunc func) {
+    g_output = func;
+}
+void Logger::setFlush(FlushFunc func) {
+    g_flush = func;
+}
+
 // Logger的四个构造函数
 Logger::Logger(SourceFile file, int line) :
     impl_(INFO, 0, file, line) {

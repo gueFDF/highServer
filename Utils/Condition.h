@@ -2,7 +2,6 @@
 #define CONDITION
 #include "noncopyable.h"
 #include <cassert>
-#include <cstdio>
 #include <cstdlib>
 #include <mutex>
 #include <pthread.h>
@@ -11,8 +10,8 @@
 namespace tinyrpc {
 class Condition : noncopyable {
 public:
-    explicit Condition(std::mutex& mutex) :
-        mutex_(mutex) {
+    explicit Condition() :
+        mutex_(), cond_() {
     }
     ~Condition() = default;
 
@@ -29,8 +28,19 @@ public:
         cond_.wait(lck);
     }
 
+    bool waitForSeconds(int seconds) {
+        std::unique_lock<std::mutex> lck(mutex_);
+        std::chrono::seconds timeout(seconds);
+
+        auto ret = cond_.wait_for(lck, timeout);
+        if (ret == std::cv_status::timeout) {
+            return false;
+        }
+        return true;
+    }
+
 private:
-    std::mutex& mutex_;
+    std::mutex mutex_;
     std::condition_variable cond_;
 };
 

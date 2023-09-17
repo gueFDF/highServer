@@ -2,13 +2,11 @@
 #define THREAD
 
 #include "noncopyable.h"
-#include <condition_variable>
-#include <mutex>
 #include <pthread.h>
 #include <functional>
 #include <string>
 #include <atomic>
-#include "Condition.h"
+#include <future>
 namespace tinyrpc {
 
 pid_t Gettid();
@@ -36,21 +34,20 @@ private:
     pthread_t pthreadId_; // 线程标识符
     pid_t tid_;           // 线程ID
     ThreadFunc func_;
-    std::mutex mutex_;
-    Condition latch_; // 用来线程间同步
+    std::promise<void> latch_; // 用来线程间同步
 };
 
 // 用来向自线程传递一些信息
 struct ThreadData {
 public:
     typedef Thread::ThreadFunc ThreadFunc;
-    ThreadData(ThreadFunc func, pid_t* tid, Condition& cond) :
-        func_(func), tid_(tid), cond_(cond) {
+    ThreadData(ThreadFunc func, pid_t* tid, std::promise<void>& latch) :
+        func_(func), tid_(tid), latch_(latch) {
     }
 
     ThreadFunc func_;
     pid_t* tid_;
-    Condition& cond_;
+    std::promise<void>& latch_;
 };
-} // namespace tinyrpc
+} // namespace Thread
 #endif /* THREAD */

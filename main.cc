@@ -208,12 +208,22 @@
 //     BOOST_CHECK_EQUAL(buf.avail(), 1);
 // }
 
-#include "AsynLog/Logging.h"
+#include "Logging.h"
+#include "AsyncLogging.h"
+#include "Thread.h"
+#include <unistd.h>
+
 using namespace tinyrpc;
 int main() {
-    Logger::setLogLevel(Logger::WARN);
+    tinyrpc::AsyncLogging log;
+
+    log.start();
+    Logger::setLogLevel(Logger::DEBUG);
     LOG_INFO << "sdfsdfsdfsdfsdf";
     LOG_DEBUG << "sdfsdfsdfsdfsdf";
     LOG_ERROR << "sdfsdfsdfsdfsdf";
     LOG_FATAL << "sdfsdfsdfsdfsdf";
+    LOG_INFO << "sdfsdfsdfsdfsdf";
+    LOG_INFO << "sdfsdfsdfsdfsdf";
 }
+
