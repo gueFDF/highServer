@@ -8,17 +8,10 @@ namespace tinyrpc {
 
 __thread AsyncLogging* g_asyncLog = nullptr;
 
-AsyncLogging::AsyncLogging(const std::string& basename,
-                           off_t rollSize,
-                           int flushInterval) :
+AsyncLogging::AsyncLogging(
+    const std::string& basename, off_t rollSize, int flushInterval) :
     flushInterval_(flushInterval),
-    basename_(basename),
-    rollSize_(rollSize),
-    thread_(std::bind(&AsyncLogging::threadFunc, this), "Logging"),
-    cond_(),
-    currentBuffer_(new Buffer),
-    nextBuffer_(new Buffer),
-    buffers_() {
+    basename_(basename), rollSize_(rollSize), thread_(std::bind(&AsyncLogging::threadFunc, this), "Logging"), cond_(), currentBuffer_(new Buffer), nextBuffer_(new Buffer), buffers_() {
     currentBuffer_->bzero();
     nextBuffer_->bzero();
     buffers_.reserve(16);
@@ -80,9 +73,7 @@ void AsyncLogging::threadFunc() {
             buffers_.push_back(std::move(currentBuffer_));
             currentBuffer_ = std::move(newBuffer1);
             buffersToWrite.swap(buffers_);
-            if (!nextBuffer_) {
-                nextBuffer_ = std::move(newBuffer2);
-            }
+            if (!nextBuffer_) { nextBuffer_ = std::move(newBuffer2); }
         }
 
         for (const auto& buffer : buffersToWrite) {
@@ -90,9 +81,7 @@ void AsyncLogging::threadFunc() {
         }
 
         // buffersToWrite只留两个buffer(后面用)
-        if (buffersToWrite.size() > 2) {
-            buffersToWrite.resize(2);
-        }
+        if (buffersToWrite.size() > 2) { buffersToWrite.resize(2); }
 
         if (!newBuffer1) {
             newBuffer1 = std::move(buffersToWrite.back());

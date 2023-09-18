@@ -20,13 +20,17 @@ set(CXX_FLAGS
  -rdynamic
  )
 
+if(NOT CMAKE_BUILD_TYPE)
+ set(CMAKE_BUILD_TYPE "Release")
+endif()
+
 
 # 设置可执行文件输出的路径
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 # 设置项目文件输出路径
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
-
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # 设置项目文件搜索路径
 link_directories(${PROJECT_SOURCE_DIR}/lib)
@@ -34,16 +38,21 @@ link_directories(/usr/local/lib)
 
 
 # 设置编译头文件搜索路径
-include_directories(${PROJECT_SOURCE_DIR}/Utils)
-include_directories(${PROJECT_SOURCE_DIR}/AsynLog)
+include_directories(${PROJECT_SOURCE_DIR}/include/asynLog)
+include_directories(${PROJECT_SOURCE_DIR}/include/utils)
 include_directories(/usr/local/include)
 
-add_subdirectory(AsynLog)
 
-link_libraries(AsynLog)
+# add_subdirectory(./src)
 
-add_executable(main main.cc)
+# add_subdirectory(./test)
 
 
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+add_subdirectory(./src/utils)
+add_subdirectory(./src/asynlog)
+add_subdirectory(./example)
+
+
+
  

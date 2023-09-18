@@ -29,9 +29,7 @@ size_t convert(char buf[], T value) {
     } while (i != 0);
 
     // 处理负数
-    if (value < 0) {
-        *p++ = '-';
-    }
+    if (value < 0) { *p++ = '-'; }
     *p = '\0';
     // 反转
     std::reverse(buf, p);
@@ -76,14 +74,18 @@ void FixedBuffer<SIZE>::cookieEnd() {
 
 // 用来检查是否
 void LogStream::staticCheck() {
-    static_assert(kMaxNumericSize - 10 > std::numeric_limits<double>::digits10,
-                  "kMaxNumericSize is large enough");
-    static_assert(kMaxNumericSize - 10 > std::numeric_limits<long double>::digits10,
-                  "kMaxNumericSize is large enough");
-    static_assert(kMaxNumericSize - 10 > std::numeric_limits<long>::digits10,
-                  "kMaxNumericSize is large enough");
-    static_assert(kMaxNumericSize - 10 > std::numeric_limits<long long>::digits10,
-                  "kMaxNumericSize is large enough");
+    static_assert(
+        kMaxNumericSize - 10 > std::numeric_limits<double>::digits10,
+        "kMaxNumericSize is large enough");
+    static_assert(
+        kMaxNumericSize - 10 > std::numeric_limits<long double>::digits10,
+        "kMaxNumericSize is large enough");
+    static_assert(
+        kMaxNumericSize - 10 > std::numeric_limits<long>::digits10,
+        "kMaxNumericSize is large enough");
+    static_assert(
+        kMaxNumericSize - 10 > std::numeric_limits<long long>::digits10,
+        "kMaxNumericSize is large enough");
 }
 
 template <typename T>

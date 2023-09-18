@@ -7,20 +7,14 @@
 #include <unistd.h>
 namespace tinyrpc {
 
-LogFile::LogFile(const std::string& basename,
-                 off_t rollSize,
-                 bool threadSafe,
-                 int flushInterval,
-                 int checkEveryN) :
+LogFile::LogFile(
+    const std::string& basename,
+    off_t rollSize,
+    bool threadSafe,
+    int flushInterval,
+    int checkEveryN) :
     basename_(basename),
-    rollSize_(rollSize),
-    flushInterval_(flushInterval),
-    checkEveryN_(checkEveryN),
-    count_(0),
-    mutex_(threadSafe ? new std::mutex : NULL),
-    startOfPeriod_(0),
-    lastRoll_(0),
-    lastFlush_(0) {
+    rollSize_(rollSize), flushInterval_(flushInterval), checkEveryN_(checkEveryN), count_(0), mutex_(threadSafe ? new std::mutex : nullptr), startOfPeriod_(0), lastRoll_(0), lastFlush_(0) {
     assert(basename.find('/') == std::string::npos);
     rollFile();
 }

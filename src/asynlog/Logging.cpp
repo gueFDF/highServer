@@ -7,18 +7,18 @@ namespace tinyrpc {
 __thread char t_time[64];     // 当前线程的时间字符串“年：月：日：时：分：秒”
 __thread time_t t_lastSecond; // 当前线程上一次日志记录时的秒数
 
-const char* LogLevelName[Logger::NUM_LOG_LEVELS] =
-    {
-        " [TRACE] ",
-        " [DEBUG] ",
-        " [INFO]  ",
-        " [WARN]  ",
-        " [ERROR] ",
-        " [FATAL] ",
+const char* LogLevelName[Logger::NUM_LOG_LEVELS] = {
+    " [TRACE] ",
+    " [DEBUG] ",
+    " [INFO]  ",
+    " [WARN]  ",
+    " [ERROR] ",
+    " [FATAL] ",
 };
 
 // Impl的构造函数
-Logger::Impl::Impl(LogLevel level, int savedErrno, const SourceFile& file, int line) :
+Logger::Impl::Impl(
+    LogLevel level, int savedErrno, const SourceFile& file, int line) :
     time_(GetTimeNow()), // 登记当前时间
     stream_(),           // Logstream类
     level_(level),       // 日志级别

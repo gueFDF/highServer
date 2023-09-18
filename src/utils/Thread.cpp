@@ -29,18 +29,12 @@ void* startThread(void* obj) {
 }
 
 Thread::Thread(ThreadFunc func, const std::string& n) :
-    started_(false),
-    joined_(false),
-    pthreadId_(0),
-    tid_(0),
-    func_(std::move(func)) {
+    started_(false), joined_(false), pthreadId_(0), tid_(0), func_(std::move(func)) {
 }
 
 // 当主线程结束时,需要detach子线程
 Thread::~Thread() {
-    if (started_ && !joined_) {
-        pthread_detach(pthreadId_);
-    }
+    if (started_ && !joined_) { pthread_detach(pthreadId_); }
 }
 
 void Thread::start() {
