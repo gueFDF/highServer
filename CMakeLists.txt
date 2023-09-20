@@ -40,18 +40,17 @@ link_directories(/usr/local/lib)
 # 设置编译头文件搜索路径
 include_directories(${PROJECT_SOURCE_DIR}/include/asynLog)
 include_directories(${PROJECT_SOURCE_DIR}/include/utils)
+include_directories(${PROJECT_SOURCE_DIR}/include/net)
 include_directories(/usr/local/include)
 
-
-# add_subdirectory(./src)
-
-# add_subdirectory(./test)
 
 
 
 add_subdirectory(./src/utils)
 add_subdirectory(./src/asynlog)
+add_subdirectory(./src/net)
 add_subdirectory(./example)
+add_subdirectory(./test)
 
 
 
