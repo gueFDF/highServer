@@ -19,11 +19,11 @@ const char* LogLevelName[Logger::NUM_LOG_LEVELS] = {
 // Impl的构造函数
 Logger::Impl::Impl(
     LogLevel level, int savedErrno, const SourceFile& file, int line) :
-    time_(GetTimeNow()), // 登记当前时间
-    stream_(),           // Logstream类
-    level_(level),       // 日志级别
-    line_(line),         // 行号
-    basename_(file)      // 文件名称
+    time_(),        // 登记当前时间
+    stream_(),      // Logstream类
+    level_(level),  // 日志级别
+    line_(line),    // 行号
+    basename_(file) // 文件名称
 {
     getTime(); // 将时间输出到buffer中
     tid();     // 缓存当前线程tid
@@ -39,7 +39,6 @@ Logger::Impl::Impl(
 }
 
 void Logger::Impl::getTime() {
-    time_.gettime();
     stream_ << time_.toIsoString();
 }
 

@@ -18,7 +18,7 @@ Poller::~Poller() {
 
 DateTime Poller::poll(int timeoutMs, ChannelList* activeChannels) {
     int numEvents = ::poll(&*pollfds_.begin(), pollfds_.size(), timeoutMs);
-    DateTime now = GetTimeNow();
+    DateTime now;
     if (numEvents > 0) {
         LOG_TRACE << numEvents << " events happended";
         fillActiveChannels(numEvents, activeChannels);

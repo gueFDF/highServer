@@ -1,10 +1,13 @@
 #include "EventLoop.h"
 #include "CurrentThread.h"
 #include "AsyncLogging.h"
+#include "DateTime.h"
 #include "Logging.h"
 #include <cassert>
+#include <cstdio>
 #include <poll.h>
 #include "Poller.h"
+#include "TimerId.h"
 namespace tinyrpc {
 
 __thread EventLoop* t_loopInThisThread = 0;
@@ -14,7 +17,8 @@ EventLoop::EventLoop() :
     quit_(false),
     looping_(false),
     threadId_(tid()),
-    poller_(new Poller(this)) {
+    poller_(new Poller(this)),
+    timerQueue_(new TimerQueue(this)) {
     if (t_loopInThisThread) {
         LOG_FATAL << "Another EventLoop " << t_loopInThisThread
                   << " exists in this thread " << threadId_;
@@ -49,6 +53,23 @@ void EventLoop::loop() {
 
 void EventLoop::quit() {
     quit_ = true;
+}
+
+TimerId EventLoop::runAt(const DateTime& time, const TimerCallback& cb) {
+    return timerQueue_->addTimer(cb, time, 0.0);
+}
+
+TimerId EventLoop::runAfter(double delay, const TimerCallback& cb) {
+    DateTime a = DateTime();
+    printf("timea %s\n", a.toIsoString().c_str());
+    DateTime time(addTime(DateTime(), delay));
+    printf("timeb %s\n", time.toIsoString().c_str());
+    return runAt(time, cb);
+}
+
+TimerId EventLoop::runEvery(double interval, const TimerCallback& cb) {
+    DateTime time(addTime(DateTime(), interval));
+    return timerQueue_->addTimer(cb, time, interval);
 }
 
 void EventLoop::updateChannel(Channel* channel) {
