@@ -5,7 +5,7 @@
 #include <string>
 #include <netinet/in.h>
 namespace tinyrpc {
-class InetAddress : noncopyable {
+class InetAddress {
 public:
     explicit InetAddress(uint16_t port);
     InetAddress(const std::string& ip, uint16_t port);
@@ -25,6 +25,7 @@ private:
     struct sockaddr_in addr_;
 };
 
+struct sockaddr_in getLocalAddr(int sockfd);
 } // namespace tinyrpc
 
 #endif /* INETADDRESS */

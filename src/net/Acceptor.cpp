@@ -17,7 +17,7 @@ void Acceptor::listen() {
     loop_->assertInLoopThread();
     listenning_ = true;
     acceptSocket_.listen();
-    acceptChannel_.enableReading(); //设置事件并注册到poll
+    acceptChannel_.enableReading(); // 设置事件并注册到poll
 }
 
 void Acceptor::handleRead() {
@@ -25,6 +25,7 @@ void Acceptor::handleRead() {
     InetAddress peerAddr(0);
     int connfd = acceptSocket_.accept(&peerAddr);
     if (connfd >= 0) {
+        //如果注册回调,进行回调
         if (newConnectionCallback_) {
             newConnectionCallback_(connfd, peerAddr);
         } else {

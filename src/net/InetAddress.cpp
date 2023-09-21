@@ -35,4 +35,14 @@ std::string InetAddress::toHostPort() const {
 
     return buf;
 }
+
+struct sockaddr_in getLocalAddr(int sockfd) {
+    struct sockaddr_in localaddr;
+    bzero(&localaddr, sizeof localaddr);
+    socklen_t addrlen = sizeof(localaddr);
+    if (::getsockname(sockfd, (struct sockaddr*)(&localaddr), &addrlen) < 0) {
+        LOG_SYSERR << "sockets::getLocalAddr";
+    }
+    return localaddr;
+}
 } // namespace tinyrpc
