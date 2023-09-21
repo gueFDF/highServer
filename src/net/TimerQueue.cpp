@@ -77,13 +77,17 @@ TimerId TimerQueue::addTimer(const TimerCallback& cb,
                              DateTime when,
                              double interval) {
     Timer* timer = new Timer(cb, when, interval);
+    loop_->runInLoop(std::bind(&TimerQueue::addTimerInLoop, this, timer));
+    return TimerId(timer);
+}
+
+void TimerQueue::addTimerInLoop(Timer* timer) {
     loop_->assertInLoopThread();
     bool earliestChanged = insert(timer);
     // 如果最早被触发的定时器被改变,重置timerfd_的超时时间(防止导致,有任务到期,timerfd_还未到期)
     if (earliestChanged) {
         resetTimerfd(timerfd_, timer->expiration());
     }
-    return TimerId(timer);
 }
 
 void TimerQueue::handleRead() {
