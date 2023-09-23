@@ -5,6 +5,7 @@ namespace tinyrpc {
 class InetAddress;
 int createNBListenSocket();
 void Close(int fd);
+int getSocketError(int sockfd);
 class Socket : noncopyable {
 public:
     explicit Socket(int sockfd) :

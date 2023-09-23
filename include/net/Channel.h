@@ -9,7 +9,7 @@ class Channel : noncopyable {
 public:
     typedef std::function<void()> EventCallback;
     Channel(EventLoop* loop, int fd);
-
+    ~Channel();
     void handleEvent();
     void setReadCallback(const EventCallback& cb) {
         readCallback_ = cb;
@@ -19,6 +19,9 @@ public:
     }
     void setErrorCallback(const EventCallback& cb) {
         errorCallback_ = cb;
+    }
+    void setCloseCallback(const EventCallback& cb) {
+        closeCallback_ = cb;
     }
 
     int fd() const {
@@ -35,6 +38,12 @@ public:
     }
     void enableReading() {
         events_ |= kReadEvent;
+        update();
+    }
+
+    // 关闭所有事件
+    void disableAll() {
+        events_ = kNoneEvent;
         update();
     }
     int index() {
@@ -59,9 +68,12 @@ private:
     int events_;
     int revents_;
     int index_; // used by Poller.
+
+    bool eventHandling_;
     EventCallback readCallback_;
     EventCallback writeCallback_;
     EventCallback errorCallback_;
+    EventCallback closeCallback_;
 };
 
 } // namespace tinyrpc

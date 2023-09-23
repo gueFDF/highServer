@@ -47,17 +47,25 @@ public:
     void setMessageCallback(const MessageCallback& cb) {
         messageCallback_ = cb;
     }
+    void setCloseCallback(const CloseCallback& cb) {
+        closeCallback_ = cb;
+    }
 
-    void connectEstablished();
+    void connectEstablished(); // 新连接进行回调
+    void connectDestroyed();   // 销毁连接进行回调
 
 private:
     enum StateE { kConnecting,
                   kConnected,
+                  kDisconnected
     };
     void setState(StateE s) {
         state_ = s;
     }
     void handleRead();
+    void handleWrite();
+    void handleClose();
+    void handleError();
 
     EventLoop* loop_;
     std::string name_;
@@ -69,6 +77,7 @@ private:
     InetAddress peerAddr_;
     ConnectionCallback connectionCallback_;
     MessageCallback messageCallback_;
+    CloseCallback closeCallback_;
 };
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 } // namespace tinyrpc

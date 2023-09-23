@@ -25,7 +25,7 @@ void Acceptor::handleRead() {
     InetAddress peerAddr(0);
     int connfd = acceptSocket_.accept(&peerAddr);
     if (connfd >= 0) {
-        //如果注册回调,进行回调
+        // 如果注册回调,进行回调
         if (newConnectionCallback_) {
             newConnectionCallback_(connfd, peerAddr);
         } else {

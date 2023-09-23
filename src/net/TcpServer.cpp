@@ -47,14 +47,27 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr) {
              << "] from " << peerAddr.toHostPort();
     InetAddress localAddr(getLocalAddr(sockfd));
 
-    //创建connection对象
+    // 创建connection对象
     TcpConnectionPtr conn(
         new TcpConnection(loop_, connName, sockfd, localAddr, peerAddr));
     connections_[connName] = conn;
     // 注册
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);
+    conn->setCloseCallback(
+        std::bind(&TcpServer::removeConnection, this, std::placeholders::_1));
     conn->connectEstablished(); // 注册到epoll并且执行connectionCallback_
+}
+
+void TcpServer::removeConnection(const TcpConnectionPtr& conn) {
+    loop_->assertInLoopThread();
+    LOG_INFO << "TcpServer::removeConnection [" << name_
+             << "] - connection " << conn->name();
+    size_t n = connections_.erase(conn->name());
+    assert(n == 1);
+    (void)n;
+    loop_->queueInLoop(
+        std::bind(&TcpConnection::connectDestroyed, conn));
 }
 
 } // namespace tinyrpc

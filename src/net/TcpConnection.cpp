@@ -1,4 +1,5 @@
 #include "TcpConnection.h"
+#include "Error_no.h"
 #include "Logging.h"
 #include "Socket.h"
 #include "Channel.h"
@@ -22,8 +23,15 @@ TcpConnection::TcpConnection(EventLoop* loop,
     peerAddr_(peerAddr) {
     LOG_DEBUG << "TcpConnection::ctor[" << name_ << "] at " << this
               << " fd=" << sockfd;
+    // 设置回调函数
     channel_->setReadCallback(
         std::bind(&TcpConnection::handleRead, this));
+    channel_->setWriteCallback(
+        std::bind(&TcpConnection::handleWrite, this));
+    channel_->setCloseCallback(
+        std::bind(&TcpConnection::handleClose, this));
+    channel_->setErrorCallback(
+        std::bind(&TcpConnection::handleError, this));
 }
 
 TcpConnection::~TcpConnection() {
@@ -40,11 +48,43 @@ void TcpConnection::connectEstablished() {
     connectionCallback_(shared_from_this());
 }
 
+void TcpConnection::connectDestroyed() {
+    loop_->assertInLoopThread();
+    assert(state_ == kConnected);
+    setState(kDisconnected);
+    channel_->disableAll();
+    connectionCallback_(shared_from_this());
+    loop_->removeChannel(channel_.get());
+}
+
 // 收到信息,读取后进行回调
 void TcpConnection::handleRead() {
     char buf[65536];
     ssize_t n = ::read(channel_->fd(), buf, sizeof(buf));
-    messageCallback_(shared_from_this(), buf, n);
+    if (n > 0) {
+        messageCallback_(shared_from_this(), buf, n);
+    } else if (n == 0) { // 关闭
+        handleClose();
+    } else {
+        handleError();
+    }
+}
+
+void TcpConnection::handleWrite() {
+}
+
+void TcpConnection::handleClose() {
+    loop_->assertInLoopThread();
+    LOG_TRACE << "TcpConnection::handleClose state = " << state_;
+    assert(state_ == kConnected);
+    channel_->disableAll();
+    closeCallback_(shared_from_this());
+}
+
+void TcpConnection::handleError() {
+    int err = getSocketError(channel_->fd());
+    LOG_ERROR << "TcpConnection::handleError [" << name_
+              << "] - SO_ERROR = " << err << " " << strerror_tl(err);
 }
 
 } // namespace tinyrpc

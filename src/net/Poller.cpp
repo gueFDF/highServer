@@ -74,5 +74,33 @@ void Poller::updateChannel(Channel* channel) {
         }
     }
 }
+void Poller::removeChannel(Channel* channel) {
+    assertInLoopThread();
+    //从channels中移除
+    LOG_TRACE << "fd = " << channel->fd();
+    assert(channels_.find(channel->fd()) != channels_.end());
+    assert(channels_[channel->fd()] == channel);
+    assert(channel->isNoneEvent());
+    int idx = channel->index();
+    assert(0 <= idx && idx < static_cast<int>(pollfds_.size()));
+    const struct pollfd& pfd = pollfds_[idx];
+    assert(pfd.fd == -channel->fd() - 1 && pfd.events == channel->events());
+    size_t n = channels_.erase(channel->fd());
+    assert(n == 1);
+
+    // 从vector中移除
+    if (static_cast<size_t>(idx) == pollfds_.size() - 1) { // 在vector的最后
+        pollfds_.pop_back();
+    } else { // 不在最后
+        int channelAtEnd = pollfds_.back().fd;
+        // 将要移除的channel放到最后
+        iter_swap(pollfds_.begin() + idx, pollfds_.end() - 1);
+        if (channelAtEnd < 0) {
+            channelAtEnd = -channelAtEnd - 1;
+        }
+        channels_[channelAtEnd]->set_index(idx);
+        pollfds_.pop_back(); // 移除
+    }
+}
 
 } // namespace tinyrpc
