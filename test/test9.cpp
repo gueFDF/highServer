@@ -20,7 +20,7 @@ void onMessage(const tinyrpc::TcpConnectionPtr& conn,
     printf("onMessage(): received %zd bytes from connection [%s] \n",
            buf->readableBytes(),
            conn->name().c_str());
-
+    sleep(6);
     conn->send(buf->retrieveAsString());
 }
 
@@ -33,6 +33,7 @@ int main() {
     tinyrpc::TcpServer server(&loop, listenAddr);
     server.setConnectionCallback(onConnection);
     server.setMessageCallback(onMessage);
+    server.setThreadNum(5);
     server.start();
 
     loop.loop();

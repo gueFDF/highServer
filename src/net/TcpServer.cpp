@@ -6,6 +6,7 @@
 #include <functional>
 #include <memory>
 #include "EventLoop.h"
+#include "EventLoopThreadPool.h"
 namespace tinyrpc {
 
 class Acceptor;
@@ -15,6 +16,7 @@ TcpServer::TcpServer(EventLoop* loop, const InetAddress& listenAddr) :
     loop_(loop),
     name_(listenAddr.toHostPort()),
     acceptor_(new Acceptor(loop, listenAddr)),
+    threadPool_(new EventLoopThreadPool(loop)),
     started_(false),
     nextConnId_(1) {
     acceptor_->setNewConnectionCallback(
@@ -24,9 +26,15 @@ TcpServer::TcpServer(EventLoop* loop, const InetAddress& listenAddr) :
 TcpServer::~TcpServer() {
 }
 
+void TcpServer::setThreadNum(int numThreads) {
+    assert(0 <= numThreads);
+    threadPool_->setThreadNum(numThreads);
+}
+
 void TcpServer::start() {
     if (!started_) {
         started_ = true;
+        threadPool_->start();
     }
 
     if (!acceptor_->listenning()) {
@@ -46,10 +54,10 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr) {
              << "] - new connection [" << connName
              << "] from " << peerAddr.toHostPort();
     InetAddress localAddr(getLocalAddr(sockfd));
-
+    EventLoop* ioLoop = threadPool_->getNextLoop();
     // 创建connection对象
     TcpConnectionPtr conn(
-        new TcpConnection(loop_, connName, sockfd, localAddr, peerAddr));
+        new TcpConnection(ioLoop, connName, sockfd, localAddr, peerAddr));
     connections_[connName] = conn;
     // 注册
     conn->setConnectionCallback(connectionCallback_);
@@ -57,10 +65,14 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr) {
     conn->setWriteCompleteCallback(writeCompleteCallback_);
     conn->setCloseCallback(
         std::bind(&TcpServer::removeConnection, this, std::placeholders::_1));
-    conn->connectEstablished(); // 注册到epoll并且执行connectionCallback_
+    ioLoop->runInLoop(std::bind(&TcpConnection::connectEstablished, conn));
 }
 
 void TcpServer::removeConnection(const TcpConnectionPtr& conn) {
+    loop_->runInLoop(std::bind(&TcpServer::removeConnectionInLoop, this, conn));
+}
+
+void TcpServer::removeConnectionInLoop(const TcpConnectionPtr& conn) {
     loop_->assertInLoopThread();
     LOG_INFO << "TcpServer::removeConnection [" << name_
              << "] - connection " << conn->name();
