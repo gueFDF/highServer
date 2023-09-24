@@ -7,7 +7,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& listenAddr) :
     acceptSocket_(createNBListenSocket()),
     acceptChannel_(loop, acceptSocket_.fd()),
     listenning_(false) {
-    acceptSocket_.setReuseAddr(true);
+    acceptSocket_.setReuseAddr(true);  //开启端口复用
     acceptSocket_.bindAddress(listenAddr);
     acceptChannel_.setReadCallback(
         std::bind(&Acceptor::handleRead, this));

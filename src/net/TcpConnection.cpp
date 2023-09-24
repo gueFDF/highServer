@@ -68,6 +68,9 @@ void TcpConnection::sendInLoop(const std::string& message) {
         if (nwrote >= 0) {
             if (static_cast<size_t>(nwrote) < message.size()) {
                 LOG_TRACE << "I am going to write more data";
+            } else if (writeCompleteCallback_) { // 缓冲区数据全部完成发送
+                loop_->queueInLoop(
+                    std::bind(writeCompleteCallback_, shared_from_this()));
             }
         } else {
             nwrote = 0;
@@ -84,6 +87,11 @@ void TcpConnection::sendInLoop(const std::string& message) {
             channel_->enableWriting();
         }
     }
+}
+
+// 禁用nagle算法
+void TcpConnection::setTcpNoDelay(bool on) {
+    socket_->setTcpNoDelay(on);
 }
 
 // 建立连接进行回调
@@ -125,6 +133,10 @@ void TcpConnection::handleWrite() {
             outputBuffer_.retrieve(n);
             if (outputBuffer_.readableBytes() == 0) {
                 channel_->disableWriting();
+                // 缓冲区空,触发低水位回调
+                if (writeCompleteCallback_) {
+                    std::bind(writeCompleteCallback_, shared_from_this());
+                }
                 if (state_ == kDisconnected) {
                     shutdownInLoop();
                 }

@@ -45,6 +45,7 @@ public:
     void send(const std::string& message);
     // 关闭
     void shutdown();
+    void setTcpNoDelay(bool on);
 
     void setConnectionCallback(const ConnectionCallback& cb) {
         connectionCallback_ = cb;
@@ -55,6 +56,10 @@ public:
     }
     void setCloseCallback(const CloseCallback& cb) {
         closeCallback_ = cb;
+    }
+
+    void setWriteCompleteCallback(const WriteCompleteCallback& cb) {
+        writeCompleteCallback_ = cb;
     }
 
     void connectEstablished(); // 新连接进行回调
@@ -85,6 +90,7 @@ private:
     InetAddress peerAddr_;
     ConnectionCallback connectionCallback_;
     MessageCallback messageCallback_;
+    WriteCompleteCallback writeCompleteCallback_; // 低水位回调(缓冲区清空就进行回调)                 // 高水位触发阈值
     CloseCallback closeCallback_;
     Buffer inputBuffer_;
     Buffer outputBuffer_;

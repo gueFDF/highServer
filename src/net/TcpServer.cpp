@@ -54,6 +54,7 @@ void TcpServer::newConnection(int sockfd, const InetAddress& peerAddr) {
     // 注册
     conn->setConnectionCallback(connectionCallback_);
     conn->setMessageCallback(messageCallback_);
+    conn->setWriteCompleteCallback(writeCompleteCallback_);
     conn->setCloseCallback(
         std::bind(&TcpServer::removeConnection, this, std::placeholders::_1));
     conn->connectEstablished(); // 注册到epoll并且执行connectionCallback_

@@ -13,6 +13,7 @@
 #include <sys/eventfd.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
 #include "TimerId.h"
 namespace tinyrpc {
 
@@ -27,6 +28,16 @@ static int createEventfd() {
     }
     return evtfd;
 }
+
+// 用来忽略sigpipe信号
+class IgnoreSigPipe {
+public:
+    IgnoreSigPipe() {
+        ::signal(SIGPIPE, SIG_IGN);
+    }
+};
+IgnoreSigPipe initObj;
+
 
 EventLoop::EventLoop() :
     quit_(false),
