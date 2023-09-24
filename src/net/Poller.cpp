@@ -76,7 +76,7 @@ void Poller::updateChannel(Channel* channel) {
 }
 void Poller::removeChannel(Channel* channel) {
     assertInLoopThread();
-    //从channels中移除
+    // 从channels中移除
     LOG_TRACE << "fd = " << channel->fd();
     assert(channels_.find(channel->fd()) != channels_.end());
     assert(channels_[channel->fd()] == channel);

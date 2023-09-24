@@ -2,6 +2,7 @@
 #define CALLBACKS
 #include <functional>
 #include <memory>
+#include "Buffer.h"
 namespace tinyrpc {
 class TcpConnection;
 
@@ -10,7 +11,7 @@ typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 typedef std::function<void()> TimerCallback;
 typedef std::function<void(const TcpConnectionPtr&)> ConnectionCallback;
 typedef std::function<void(const TcpConnectionPtr&,
-                           const char* data,
+                           Buffer* data,
                            ssize_t len)>
     MessageCallback;
 

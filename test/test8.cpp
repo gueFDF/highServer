@@ -1,6 +1,7 @@
 #include "TcpServer.h"
 #include "EventLoop.h"
 #include "InetAddress.h"
+#include "Buffer.h"
 #include <stdio.h>
 #include <unistd.h>
 
@@ -16,10 +17,11 @@ void onConnection(const tinyrpc::TcpConnectionPtr& conn) {
 }
 
 void onMessage(const tinyrpc::TcpConnectionPtr& conn,
-               const char* data,
+               tinyrpc::Buffer* buf,
                ssize_t len) {
     printf("onMessage(): received %zd bytes from connection [%s]\n",
            len, conn->name().c_str());
+    printf("onMessage(): [%s]\n", buf->retrieveAsString().c_str());
 }
 
 int main() {

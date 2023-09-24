@@ -20,7 +20,8 @@ TcpConnection::TcpConnection(EventLoop* loop,
     socket_(new Socket(sockfd)),
     channel_(new Channel(loop, sockfd)),
     localAddr_(localAddr),
-    peerAddr_(peerAddr) {
+    peerAddr_(peerAddr),
+    inputBuffer_() {
     LOG_DEBUG << "TcpConnection::ctor[" << name_ << "] at " << this
               << " fd=" << sockfd;
     // 设置回调函数
@@ -59,10 +60,10 @@ void TcpConnection::connectDestroyed() {
 
 // 收到信息,读取后进行回调
 void TcpConnection::handleRead() {
-    char buf[65536];
-    ssize_t n = ::read(channel_->fd(), buf, sizeof(buf));
+    int savedErrno = 0;
+    ssize_t n = inputBuffer_.readFd(channel_->fd(), &savedErrno);
     if (n > 0) {
-        messageCallback_(shared_from_this(), buf, n);
+        messageCallback_(shared_from_this(), &inputBuffer_, n);
     } else if (n == 0) { // 关闭
         handleClose();
     } else {

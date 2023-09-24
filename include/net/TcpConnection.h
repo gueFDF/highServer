@@ -6,6 +6,7 @@
 #include "noncopyable.h"
 #include <memory>
 #include <string>
+#include "Buffer.h"
 #include "Callbacks.h"
 namespace tinyrpc {
 class Channel;
@@ -78,6 +79,7 @@ private:
     ConnectionCallback connectionCallback_;
     MessageCallback messageCallback_;
     CloseCallback closeCallback_;
+    Buffer inputBuffer_;
 };
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 } // namespace tinyrpc
