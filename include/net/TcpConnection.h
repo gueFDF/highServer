@@ -41,6 +41,11 @@ public:
         return state_ == kConnected;
     }
 
+    // 发送数据
+    void send(const std::string& message);
+    // 关闭
+    void shutdown();
+
     void setConnectionCallback(const ConnectionCallback& cb) {
         connectionCallback_ = cb;
     }
@@ -67,6 +72,8 @@ private:
     void handleWrite();
     void handleClose();
     void handleError();
+    void sendInLoop(const std::string& message);
+    void shutdownInLoop();
 
     EventLoop* loop_;
     std::string name_;
@@ -80,6 +87,7 @@ private:
     MessageCallback messageCallback_;
     CloseCallback closeCallback_;
     Buffer inputBuffer_;
+    Buffer outputBuffer_;
 };
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 } // namespace tinyrpc

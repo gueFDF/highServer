@@ -78,4 +78,11 @@ void Socket::setReuseAddr(bool on) {
                  &optval, sizeof(optval));
 }
 
+// 半关闭(不能写数据,但是可以发送数据)
+void Socket::shutdownWrite() {
+    if (::shutdown(sockfd_, SHUT_WR) < 0) {
+        LOG_SYSERR << "sockets::shutdownWrite";
+    }
+}
+
 } // namespace tinyrpc

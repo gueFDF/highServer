@@ -8,10 +8,11 @@ class EventLoop;
 class Channel : noncopyable {
 public:
     typedef std::function<void()> EventCallback;
+    typedef std::function<void()> ReadEventCallback;
     Channel(EventLoop* loop, int fd);
     ~Channel();
     void handleEvent();
-    void setReadCallback(const EventCallback& cb) {
+    void setReadCallback(const ReadEventCallback& cb) {
         readCallback_ = cb;
     }
     void setWriteCallback(const EventCallback& cb) {
@@ -40,11 +41,22 @@ public:
         events_ |= kReadEvent;
         update();
     }
+    void enableWriting() {
+        events_ |= kWriteEvent;
+        update();
+    }
 
+    void disableWriting() {
+        events_ &= ~kWriteEvent;
+        update();
+    }
     // 关闭所有事件
     void disableAll() {
         events_ = kNoneEvent;
         update();
+    }
+    bool isWriting() const {
+        return events_ & kWriteEvent;
     }
     int index() {
         return index_;
@@ -70,7 +82,7 @@ private:
     int index_; // used by Poller.
 
     bool eventHandling_;
-    EventCallback readCallback_;
+    ReadEventCallback readCallback_;
     EventCallback writeCallback_;
     EventCallback errorCallback_;
     EventCallback closeCallback_;
