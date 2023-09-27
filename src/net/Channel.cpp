@@ -29,6 +29,7 @@ void Channel::update() {
 
 void Channel::handleEvent() {
     eventHandling_ = true;
+
     if (revents_ & POLLNVAL) {
         LOG_WARN << "Channel::handle_event() POLLNVAL";
     }
@@ -43,6 +44,7 @@ void Channel::handleEvent() {
         if (readCallback_) readCallback_();
     }
     if (revents_ & POLLOUT) {
+
         if (writeCallback_) writeCallback_();
     }
     eventHandling_ = false;

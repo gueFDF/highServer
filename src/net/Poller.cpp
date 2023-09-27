@@ -4,6 +4,7 @@
 
 #include "EventLoop.h"
 #include <cassert>
+#include <cstdio>
 #include <poll.h>
 #include <Logging.h>
 #include <sys/poll.h>
@@ -65,19 +66,19 @@ void Poller::updateChannel(Channel* channel) {
         int idx = channel->index();
         assert(0 <= idx && idx < static_cast<int>(pollfds_.size()));
         struct pollfd& pfd = pollfds_[idx];
-        assert(pfd.fd == channel->fd() || pfd.fd == -1);
+        assert(pfd.fd == channel->fd() || pfd.fd == -channel->fd() - 1);
         pfd.events = static_cast<short>(channel->events());
         pfd.revents = 0;
         if (channel->isNoneEvent()) {
             // 可以直接忽略这个fd
-            pfd.fd = -1;
+            pfd.fd = -channel->fd() - 1;
         }
     }
 }
 void Poller::removeChannel(Channel* channel) {
     assertInLoopThread();
     // 从channels中移除
-    LOG_TRACE << "fd = " << channel->fd();
+    LOG_TRACE << "remove Channel fd = " << channel->fd();
     assert(channels_.find(channel->fd()) != channels_.end());
     assert(channels_[channel->fd()] == channel);
     assert(channel->isNoneEvent());

@@ -1,4 +1,5 @@
 #include "Socket.h"
+#include <cstdio>
 #include <sys/socket.h>
 #include <unistd.h>
 #include "InetAddress.h"
@@ -104,12 +105,12 @@ void Socket::setReusePort(bool on) {
     }
 #else
     if (on) {
-        LOG_ERROR << "SO_REUSEPORT is not supported."; //不支持
+        LOG_ERROR << "SO_REUSEPORT is not supported."; // 不支持
     }
 #endif
 }
 
-// 半关闭(不能写数据,但是可以发送数据)
+// 半关闭(不能写数据,但是可以收数据)
 void Socket::shutdownWrite() {
     if (::shutdown(sockfd_, SHUT_WR) < 0) {
         LOG_SYSERR << "sockets::shutdownWrite";

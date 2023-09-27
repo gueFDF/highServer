@@ -20,10 +20,9 @@ set(CXX_FLAGS
  -rdynamic
  )
 
-if(NOT CMAKE_BUILD_TYPE)
- set(CMAKE_BUILD_TYPE "Release")
-endif()
+# set(CMAKE_BUILD_TYPE "Release")
 
+set(CMAKE_BUILD_TYPE "Debug")
 
 # 设置可执行文件输出的路径
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)

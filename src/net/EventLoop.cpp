@@ -38,7 +38,6 @@ public:
 };
 IgnoreSigPipe initObj;
 
-
 EventLoop::EventLoop() :
     quit_(false),
     looping_(false),
@@ -127,6 +126,10 @@ TimerId EventLoop::runAfter(double delay, const TimerCallback& cb) {
 TimerId EventLoop::runEvery(double interval, const TimerCallback& cb) {
     DateTime time(addTime(DateTime(), interval));
     return timerQueue_->addTimer(cb, time, interval);
+}
+
+void EventLoop::cancel(TimerId timerId) {
+    return timerQueue_->cancel(timerId);
 }
 
 void EventLoop::updateChannel(Channel* channel) {

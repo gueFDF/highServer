@@ -3,6 +3,7 @@
 #include "DateTime.h"
 #include "noncopyable.h"
 #include "Callbacks.h"
+#include <atomic>
 namespace tinyrpc {
 
 class Timer : noncopyable {
@@ -11,7 +12,8 @@ public:
         callback_(cb),
         expiration_(when),
         interval_(interval),
-        repeat_(interval > 0.0) {
+        repeat_(interval > 0.0),
+        sequence_(s_numCreated_.fetch_add(1)) {
     }
 
     void run() const {
@@ -24,6 +26,9 @@ public:
     bool repeat() const {
         return repeat_;
     }
+    int64_t sequence() const {
+        return sequence_;
+    }
 
     void restart(DateTime now);
 
@@ -32,6 +37,9 @@ private:
     DateTime expiration_;
     const double interval_;
     const bool repeat_;
+    const int64_t sequence_;
+
+    static std::atomic_int64_t s_numCreated_;
 };
 
 } // namespace tinyrpc

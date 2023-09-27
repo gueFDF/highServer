@@ -31,6 +31,7 @@ public:
     TimerId runAt(const DateTime& time, const TimerCallback& cb); // 在time触发
     TimerId runAfter(double delay, const TimerCallback& cb);      // delay时间后触发
     TimerId runEvery(double interval, const TimerCallback& cb);   // 周期性触发
+    void cancel(TimerId timerId);
 
     void wakeup();
     void updateChannel(Channel* channel);

@@ -1,4 +1,6 @@
 #include <cassert>
+#include <cstddef>
+#include <cstdio>
 #include <sys/timerfd.h>
 #include <unistd.h>
 #include <vector>
@@ -58,7 +60,8 @@ TimerQueue::TimerQueue(EventLoop* loop) :
     loop_(loop),
     timerfd_(createTimerfd()),
     timerfdChannel_(loop, timerfd_),
-    timers_() {
+    timers_(),
+    callingExpiredTimers_(false) {
     timerfdChannel_.setReadCallback(
         std::bind(&TimerQueue::handleRead, this));
     // 设置读事件
@@ -78,7 +81,12 @@ TimerId TimerQueue::addTimer(const TimerCallback& cb,
                              double interval) {
     Timer* timer = new Timer(cb, when, interval);
     loop_->runInLoop(std::bind(&TimerQueue::addTimerInLoop, this, timer));
-    return TimerId(timer);
+    return TimerId(timer, timer->sequence());
+}
+
+void TimerQueue::cancel(TimerId timerId) {
+    loop_->runInLoop(
+        std::bind(&TimerQueue::cancelInLoop, this, timerId));
 }
 
 void TimerQueue::addTimerInLoop(Timer* timer) {
@@ -90,14 +98,36 @@ void TimerQueue::addTimerInLoop(Timer* timer) {
     }
 }
 
+void TimerQueue::cancelInLoop(TimerId timerId) {
+    loop_->assertInLoopThread();
+    assert(timers_.size() == timers_.size());
+    ActiveTimer timer(timerId.value_, timerId.sequence_);
+    ActiveTimerSet::iterator it = activeTimers_.find(timer);
+    // 如果在,就删除
+    if (it != activeTimers_.end()) {
+        size_t n = timers_.erase(Entry(it->first->expiration(), it->first));
+        delete it->first;
+        activeTimers_.erase(it);
+    } else if (callingExpiredTimers_) { // 用来应对在定时器回调当中,cancel
+        cancelingTimers_.insert(timer);
+    }
+    assert(timers_.size() == activeTimers_.size());
+}
+
 void TimerQueue::handleRead() {
     loop_->assertInLoopThread();
     DateTime now;
     readTimerfd(timerfd_, now); // 将数据读出来,放置忙轮询
     std::vector<Entry> expired = getExpired(now);
+
+    callingExpiredTimers_ = true;
+    cancelingTimers_.clear(); // 清除
     for (std::vector<Entry>::iterator it = expired.begin(); it != expired.end(); ++it) {
         it->second->run(); // 执行该定时任务(对应的回调)
     }
+
+    callingExpiredTimers_ = false;
+
     reset(expired, now);
 }
 
@@ -113,6 +143,14 @@ std::vector<TimerQueue::Entry> TimerQueue::getExpired(DateTime now) {
     std::copy(timers_.begin(), it, back_inserter(expired));
     timers_.erase(timers_.begin(), it); // 删除
 
+    // 从activeTimerSet_中删除
+    for (std::vector<Entry>::const_iterator it_ = expired.begin();
+         it_ != expired.end(); ++it_) {
+        ActiveTimer timer(it_->second, it_->second->sequence());
+        size_t n = activeTimers_.erase(timer);
+    }
+
+    assert(timers_.size() == activeTimers_.size());
     return expired;
 }
 
@@ -120,7 +158,10 @@ void TimerQueue::reset(const std::vector<Entry>& expired, DateTime now) {
     DateTime nextExpire;
     nextExpire.invalid(); // 置为无效
     for (std::vector<Entry>::const_iterator it = expired.begin(); it != expired.end(); ++it) {
-        if (it->second->repeat()) {
+        ActiveTimer timer(it->second, it->second->sequence());
+        // 设置为重复触发且没有被cancel
+        if (it->second->repeat()
+            && cancelingTimers_.find(timer) == cancelingTimers_.end()) {
             it->second->restart(now);
             insert(it->second);
         } else {
@@ -136,20 +177,21 @@ void TimerQueue::reset(const std::vector<Entry>& expired, DateTime now) {
         resetTimerfd(timerfd_, nextExpire);
     }
 }
+
 bool TimerQueue::insert(Timer* timer) {
+    loop_->assertInLoopThread();
+    assert(timers_.size() == activeTimers_.size());
     bool earliestChanged = false;
     DateTime when = timer->expiration();
-
     TimerList::iterator it = timers_.begin();
     // 判断是否将会成为最小元素
     if (it == timers_.end() || when < it->first) {
         earliestChanged = true;
     }
+    timers_.insert(std::make_pair(when, timer));
 
-    std::pair<TimerList::iterator, bool> result =
-        timers_.insert(std::make_pair(when, timer));
-
-    assert(result.second);
+    activeTimers_.insert(ActiveTimer(timer, timer->sequence()));
+    assert(timers_.size() == activeTimers_.size());
     return earliestChanged;
 }
 

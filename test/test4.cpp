@@ -8,7 +8,8 @@
 
 int cnt = 0;
 tinyrpc::EventLoop* g_loop;
-
+tinyrpc::TimerId aid;
+int count = 0;
 void printTid() {
     printf("pid = %d, tid = %d\n", getpid(), tinyrpc::tid());
     printf("now %s\n", tinyrpc::DateTime().toIsoString().c_str());
@@ -18,6 +19,13 @@ void print(const char* msg) {
     printf("msg %s %s\n", tinyrpc::DateTime().toIsoString().c_str(), msg);
     if (++cnt == 20) {
         g_loop->quit();
+    }
+}
+
+void printc(const char* msg) {
+    printf("msg %s %s\n", tinyrpc::DateTime().toIsoString().c_str(), msg);
+    if (++count == 6) {
+        g_loop->cancel(aid);
     }
 }
 
@@ -32,7 +40,7 @@ int main() {
     loop.runAfter(1.5, std::bind(print, "once1.5"));
     loop.runAfter(2.5, std::bind(print, "once2.5"));
     loop.runAfter(3.5, std::bind(print, "once3.5"));
-    loop.runEvery(2, std::bind(print, "every2"));
+    aid = loop.runEvery(2, std::bind(printc, "every2"));
     loop.runEvery(3, std::bind(print, "every3"));
 
     loop.loop();
