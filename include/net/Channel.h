@@ -79,7 +79,7 @@ private:
     const int fd_;
     int events_;
     int revents_;
-    int index_; // used by Poller.
+    int index_; // used by EPoller.
 
     bool eventHandling_;
     ReadEventCallback readCallback_;

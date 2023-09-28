@@ -4,7 +4,6 @@
 
 #include "Logging.h"
 
-#include <boost/bind.hpp>
 
 #include <utility>
 

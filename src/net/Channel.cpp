@@ -2,12 +2,13 @@
 #include <cassert>
 #include <cstdio>
 #include <poll.h>
+#include <sys/epoll.h>
 #include "EventLoop.h"
 #include "Logging.h"
 namespace tinyrpc {
 const int Channel::kNoneEvent = 0;
-const int Channel::kReadEvent = POLLIN | POLLPRI;
-const int Channel::kWriteEvent = POLLOUT;
+const int Channel::kReadEvent = EPOLLIN | EPOLLPRI;
+const int Channel::kWriteEvent = EPOLLOUT;
 
 Channel::Channel(EventLoop* loop, int fdArg) :
     loop_(loop),

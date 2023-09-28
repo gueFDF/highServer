@@ -9,7 +9,7 @@
 
 namespace tinyrpc {
 class Channel;
-class Poller;
+class EPoller;
 
 class EventLoop : tinyrpc::noncopyable {
 public:
@@ -57,7 +57,7 @@ private:
     bool callingPendingFunctors_;
     const pid_t threadId_;
     DateTime pollReturnTime_;
-    std::unique_ptr<Poller> poller_;
+    std::unique_ptr<EPoller> epoller_;
     std::unique_ptr<TimerQueue> timerQueue_;
     int wakeupFd_; // 用来唤醒poll/epoll的fd
     std::unique_ptr<Channel> wakeupChannel_;

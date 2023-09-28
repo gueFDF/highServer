@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include <mutex>
 #include <poll.h>
-#include "Poller.h"
+#include "EPoller.h"
 #include <sys/eventfd.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -43,7 +43,7 @@ EventLoop::EventLoop() :
     looping_(false),
     callingPendingFunctors_(false),
     threadId_(tid()),
-    poller_(new Poller(this)),
+    epoller_(new EPoller(this)),
     timerQueue_(new TimerQueue(this)),
     wakeupFd_(createEventfd()),
     wakeupChannel_(new Channel(this, wakeupFd_)) {
@@ -71,7 +71,7 @@ void EventLoop::loop() {
 
     while (!quit_) {
         activeChannels_.clear();
-        poller_->poll(kPollTimeMs, &activeChannels_);
+        epoller_->poll(kPollTimeMs, &activeChannels_);
         for (ChannelList::iterator it = activeChannels_.begin(); it != activeChannels_.end(); ++it) {
             (*it)->handleEvent();
         }
@@ -135,13 +135,13 @@ void EventLoop::cancel(TimerId timerId) {
 void EventLoop::updateChannel(Channel* channel) {
     assert(channel->ownerLoop() == this);
     assertInLoopThread();
-    poller_->updateChannel(channel);
+    epoller_->updateChannel(channel);
 }
 
 void EventLoop::removeChannel(Channel* channel) {
     assert(channel->ownerLoop() == this);
     assertInLoopThread();
-    poller_->removeChannel(channel);
+    epoller_->removeChannel(channel);
 }
 
 void EventLoop::abortNotInLoopThread() {

@@ -1,5 +1,5 @@
-#ifndef POLLER
-#define POLLER
+#ifndef EPOLLER
+#define EPOLLER
 #include <map>
 #include <vector>
 
@@ -7,16 +7,16 @@
 #include "DateTime.h"
 #include "EventLoop.h"
 #include "noncopyable.h"
+#include <sys/epoll.h>
 
-struct pollfd;
 namespace tinyrpc {
 
 class Channel;
-class Poller : noncopyable {
+class EPoller : noncopyable {
 public:
     typedef std::vector<Channel*> ChannelList;
-    Poller(EventLoop* loop);
-    ~Poller();
+    EPoller(EventLoop* loop);
+    ~EPoller();
 
     DateTime poll(int timeoutMs, ChannelList* activeChannels);
     void updateChannel(Channel* channel);
@@ -27,14 +27,16 @@ public:
     }
 
 private:
+    static const int kInitEventListSize = 16;
     void fillActiveChannels(int numEvents, ChannelList* activeChannels) const;
-    typedef std::vector<struct pollfd> PollFdList;
-    typedef std::map<int, Channel*> ChannelMap;
+    void update(int operation, Channel* channel);
+    typedef std::vector<struct epoll_event> EventList;
 
     EventLoop* ownerLoop_;
-    PollFdList pollfds_;
-    ChannelMap channels_;
+    int epollfd_;
+    EventList events_;
+
 };
 
 } // namespace tinyrpc
-#endif /* POLLER */
+#endif /* EPOLLER */

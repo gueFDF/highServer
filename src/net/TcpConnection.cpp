@@ -9,6 +9,7 @@
 #include <cassert>
 #include <cerrno>
 #include <cstddef>
+#include <cstdio>
 #include <sys/types.h>
 #include <unistd.h>
 namespace tinyrpc {
