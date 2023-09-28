@@ -5,7 +5,6 @@
 #include "Buffer.h"
 namespace tinyrpc {
 class TcpConnection;
-
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 
 typedef std::function<void()> TimerCallback;
