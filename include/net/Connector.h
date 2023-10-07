@@ -5,7 +5,7 @@
 #include "noncopyable.h"
 #include <functional>
 #include <memory>
-namespace tinyrpc {
+namespace highServer {
 
 class Channel;
 class EventLoop;
@@ -58,6 +58,6 @@ private:
     TimerId timerId_;
 };
 typedef std::shared_ptr<Connector> ConnectorPtr;
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* CONNECTOR */

@@ -5,7 +5,7 @@
 #include <limits>
 #include <cassert>
 
-namespace tinyrpc {
+namespace highServer {
 
 // 十进制查询表
 const char digits[] = "9876543210123456789";
@@ -205,4 +205,4 @@ LogStream& LogStream::operator<<(const SourceFile& v) {
     buffer_.append(v.data_, v.size_);
     return *this;
 }
-} // namespace tinyrpc
+} // namespace highServer

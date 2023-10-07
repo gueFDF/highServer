@@ -3,7 +3,7 @@
 #include <functional>
 #include <memory>
 #include "Buffer.h"
-namespace tinyrpc {
+namespace highServer {
 class TcpConnection;
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
 
@@ -16,6 +16,6 @@ typedef std::function<void(const TcpConnectionPtr&)> WriteCompleteCallback;
 typedef std::function<void(const TcpConnectionPtr&, size_t)> HighWaterMarkCallback;
 typedef std::function<void(const TcpConnectionPtr&)> CloseCallback;
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* CALLBACKS */

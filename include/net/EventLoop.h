@@ -7,11 +7,11 @@
 #include <mutex>
 #include "CurrentThread.h"
 
-namespace tinyrpc {
+namespace highServer {
 class Channel;
 class EPoller;
 
-class EventLoop : tinyrpc::noncopyable {
+class EventLoop : highServer::noncopyable {
 public:
     typedef std::function<void()> Functor;
 
@@ -66,6 +66,6 @@ private:
     std::vector<Functor> pendingFunctors_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* EVENTLOOP */

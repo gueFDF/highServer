@@ -1,16 +1,16 @@
 #include "EventLoop.h"
 #include "Thread.h"
 
-tinyrpc::EventLoop* g_loop;
+highServer::EventLoop* g_loop;
 
 void threadFunc() {
     g_loop->loop();
 }
 
 int main() {
-    tinyrpc::EventLoop loop;
+    highServer::EventLoop loop;
     g_loop = &loop;
-    tinyrpc::Thread t(threadFunc);
+    highServer::Thread t(threadFunc);
     t.start();
     t.join();
 }

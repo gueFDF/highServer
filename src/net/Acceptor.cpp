@@ -1,7 +1,7 @@
 #include "Acceptor.h"
 #include "EventLoop.h"
 #include "InetAddress.h"
-namespace tinyrpc {
+namespace highServer {
 Acceptor::Acceptor(EventLoop* loop, const InetAddress& listenAddr) :
     loop_(loop),
     acceptSocket_(createNBListenSocket()),
@@ -33,4 +33,4 @@ void Acceptor::handleRead() {
         }
     }
 }
-} // namespace tinyrpc
+} // namespace highServer

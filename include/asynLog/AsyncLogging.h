@@ -9,7 +9,7 @@
 #include "Thread.h"
 #include "LogStream.h"
 #include "Condition.h"
-namespace tinyrpc {
+namespace highServer {
 class AsyncLogging;
 extern __thread AsyncLogging* g_asyncLog;
 class AsyncLogging : noncopyable {
@@ -51,6 +51,6 @@ private:
     Condition cond_;       // 用来线程间同步
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* ASYNCLOGGING */

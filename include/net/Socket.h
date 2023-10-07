@@ -1,7 +1,7 @@
 #ifndef SOCKET
 #define SOCKET
 #include "noncopyable.h"
-namespace tinyrpc {
+namespace highServer {
 class InetAddress;
 int createNBListenSocket();
 void Close(int fd);
@@ -30,6 +30,6 @@ private:
     const int sockfd_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* SOCKET */

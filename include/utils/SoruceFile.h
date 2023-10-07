@@ -2,7 +2,7 @@
 #define SORUCEFILE
 #include <cstring>
 // 用来计算文件路径的基名
-namespace tinyrpc {
+namespace highServer {
 
 class SourceFile {
 public:
@@ -29,6 +29,6 @@ public:
     const char* data_;
     int size_;
 };
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* SORUCEFILE */

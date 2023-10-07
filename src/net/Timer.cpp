@@ -2,7 +2,7 @@
 #include "DateTime.h"
 #include "TimerQueue.h"
 
-using namespace tinyrpc;
+using namespace highServer;
 
 std::atomic_int64_t Timer::s_numCreated_;
 void Timer::restart(DateTime now) {

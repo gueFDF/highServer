@@ -7,7 +7,7 @@
 #include <string>
 #include <map>
 #include <TcpConnection.h>
-namespace tinyrpc {
+namespace highServer {
 class Acceptor;
 class EventLoop;
 class EventLoopThreadPool;
@@ -45,6 +45,6 @@ private:
     int nextConnId_;
     ConnectionMap connections_;
 };
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* TCPSERVER */

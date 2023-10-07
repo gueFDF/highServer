@@ -7,7 +7,7 @@
 #include <sys/types.h>
 #include "CurrentThread.h"
 
-namespace tinyrpc {
+namespace highServer {
 
 pid_t Gettid() {
     return static_cast<pid_t>(::syscall(SYS_gettid));
@@ -58,4 +58,4 @@ int Thread::join() {
     joined_ = true;
     return pthread_join(pthreadId_, NULL);
 }
-} // namespace tinyrpc
+} // namespace highServer

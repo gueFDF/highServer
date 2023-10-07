@@ -7,7 +7,7 @@
 #include <strings.h>
 #include <arpa/inet.h>
 #include <sys/socket.h>
-namespace tinyrpc {
+namespace highServer {
 // IPv4 地址中的通配地址
 static const in_addr_t kInaddrAny = INADDR_ANY;
 
@@ -65,4 +65,4 @@ bool isSelfConnect(int sockfd) {
     return localaddr.sin_port == peeraddr.sin_port
            && localaddr.sin_addr.s_addr == peeraddr.sin_addr.s_addr;
 }
-} // namespace tinyrpc
+} // namespace highServer

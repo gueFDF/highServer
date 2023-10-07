@@ -1,6 +1,6 @@
 #ifndef ERROR_NO
 #define ERROR_NO
-namespace tinyrpc {
+namespace highServer {
 const char* strerror_tl(int savedErrno);
 }
 

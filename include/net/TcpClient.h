@@ -6,7 +6,7 @@
 #include "noncopyable.h"
 #include <memory>
 #include <mutex>
-namespace tinyrpc {
+namespace highServer {
 class Connector;
 typedef std::shared_ptr<Connector> ConnectorPtr;
 class TcpClient : noncopyable {
@@ -59,6 +59,6 @@ private:
     TcpConnectionPtr connection_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* TCPCLIENT */

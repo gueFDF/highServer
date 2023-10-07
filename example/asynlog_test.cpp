@@ -3,9 +3,9 @@
 #include "Thread.h"
 #include <unistd.h>
 
-using namespace tinyrpc;
+using namespace highServer;
 int main() {
-    tinyrpc::AsyncLogging log;
+    highServer::AsyncLogging log;
 
     log.start();
     Logger::setLogLevel(Logger::DEBUG);

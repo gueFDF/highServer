@@ -12,7 +12,7 @@
 
 std::string message = "Hello\n";
 
-void onConnection(const tinyrpc::TcpConnectionPtr& conn) {
+void onConnection(const highServer::TcpConnectionPtr& conn) {
     if (conn->connected()) {
         printf("onConnection(): new connection [%s] from %s\n",
                conn->name().c_str(),
@@ -24,8 +24,8 @@ void onConnection(const tinyrpc::TcpConnectionPtr& conn) {
     }
 }
 
-void onMessage(const tinyrpc::TcpConnectionPtr& conn,
-               tinyrpc::Buffer* buf) {
+void onMessage(const highServer::TcpConnectionPtr& conn,
+               highServer::Buffer* buf) {
     printf("onMessage(): received %zd bytes from connection [%s] \n",
            buf->readableBytes(),
            conn->name().c_str());
@@ -34,9 +34,9 @@ void onMessage(const tinyrpc::TcpConnectionPtr& conn,
 }
 
 int main() {
-    tinyrpc::EventLoop loop;
-    tinyrpc::InetAddress serverAddr("127.0.0.1", 9981);
-    tinyrpc::TcpClient client(&loop, serverAddr);
+    highServer::EventLoop loop;
+    highServer::InetAddress serverAddr("127.0.0.1", 9981);
+    highServer::TcpClient client(&loop, serverAddr);
 
     client.setConnectionCallback(onConnection);
     client.setMessageCallback(onMessage);

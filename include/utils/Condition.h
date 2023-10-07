@@ -7,7 +7,7 @@
 #include <pthread.h>
 #include <condition_variable>
 
-namespace tinyrpc {
+namespace highServer {
 class Condition : noncopyable {
 public:
     explicit Condition() :
@@ -44,5 +44,5 @@ private:
     std::condition_variable cond_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 #endif /* CONDITION */

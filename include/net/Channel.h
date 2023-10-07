@@ -2,7 +2,7 @@
 #define CHANNEL
 #include "noncopyable.h"
 #include <functional>
-namespace tinyrpc {
+namespace highServer {
 class EventLoop;
 
 class Channel : noncopyable {
@@ -88,6 +88,6 @@ private:
     EventCallback closeCallback_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* CHANNEL */

@@ -3,7 +3,7 @@
 #include "Error_no.h"
 #include <cassert>
 #include <iostream>
-namespace tinyrpc {
+namespace highServer {
 
 AppendFile::AppendFile(std::string filename) :
     fp_(::fopen(filename.c_str(), "ae")), // 'e' for O_CLOEXEC
@@ -48,4 +48,4 @@ void AppendFile::flush() {
     ::fflush(fp_);
 }
 
-} // namespace tinyrpc
+} // namespace highServer

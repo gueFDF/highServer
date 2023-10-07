@@ -3,16 +3,16 @@
 #include <cstdio>
 #include <unistd.h>
 void threadFunc() {
-    printf("threadFunc(): pid = %d, tid = %d\n", getpid(), tinyrpc::tid());
-    tinyrpc::EventLoop loop;
+    printf("threadFunc(): pid = %d, tid = %d\n", getpid(), highServer::tid());
+    highServer::EventLoop loop;
     loop.loop();
 }
 
 int main() {
-    tinyrpc::Logger::setLogLevel(tinyrpc::Logger::TRACE);
-    printf("main(): pid = %d, tid = %d\n", getpid(), tinyrpc::tid());
-    tinyrpc::Thread thread(threadFunc);
+    highServer::Logger::setLogLevel(highServer::Logger::TRACE);
+    printf("main(): pid = %d, tid = %d\n", getpid(), highServer::tid());
+    highServer::Thread thread(threadFunc);
     thread.start();
-    tinyrpc::EventLoop loop;
+    highServer::EventLoop loop;
     loop.loop();
 }

@@ -11,7 +11,7 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-namespace tinyrpc {
+namespace highServer {
 const int Connector::kMaxRetryDelayMs;
 
 Connector::Connector(EventLoop* loop, const InetAddress& serverAddr) :
@@ -177,4 +177,4 @@ void Connector::retry(int sockfd) {
     }
 }
 
-} // namespace tinyrpc
+} // namespace highServer

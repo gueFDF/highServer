@@ -4,7 +4,7 @@
 #include <cassert>
 #include <functional>
 
-namespace tinyrpc {
+namespace highServer {
 
 __thread AsyncLogging* g_asyncLog = nullptr;
 
@@ -102,4 +102,4 @@ void AsyncLogging::threadFunc() {
 void AsyncLogging::StartAsyncLog() {
 }
 
-}; // namespace tinyrpc
+}; // namespace highServer

@@ -10,7 +10,7 @@
 #include "Timer.h"
 #include "Logging.h"
 #include "TimerId.h"
-namespace tinyrpc {
+namespace highServer {
 int createTimerfd() {
     // 创建一个定时文件描述符
     int timerfd = ::timerfd_create(CLOCK_MONOTONIC,
@@ -195,4 +195,4 @@ bool TimerQueue::insert(Timer* timer) {
     return earliestChanged;
 }
 
-} // namespace tinyrpc
+} // namespace highServer

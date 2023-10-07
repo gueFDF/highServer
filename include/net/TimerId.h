@@ -1,7 +1,7 @@
 #ifndef TIMERID
 #define TIMERID
 #include <cstdint>
-namespace tinyrpc {
+namespace highServer {
 class Timer;
 class TimerId {
 public:
@@ -16,6 +16,6 @@ private:
     int64_t sequence_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* TIMERID */

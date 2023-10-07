@@ -15,7 +15,7 @@
 #include <unistd.h>
 #include <signal.h>
 #include "TimerId.h"
-namespace tinyrpc {
+namespace highServer {
 
 __thread EventLoop* t_loopInThisThread = 0;
 const int kPollTimeMs = 10000;
@@ -182,4 +182,4 @@ void EventLoop::doPendingFunctors() {
     callingPendingFunctors_ = false;
 }
 
-} // namespace tinyrpc
+} // namespace highServer

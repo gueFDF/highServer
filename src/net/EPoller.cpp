@@ -11,7 +11,7 @@
 #include <sys/epoll.h>
 #include <sys/poll.h>
 
-namespace tinyrpc {
+namespace highServer {
 
 const int kNew = -1;  // 未添加
 const int kAdded = 1; // 已添加
@@ -111,4 +111,4 @@ void EPoller::update(int operation, Channel* channel) {
     }
 }
 
-} // namespace tinyrpc
+} // namespace highServer

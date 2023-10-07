@@ -1,6 +1,6 @@
 #ifndef NONCOPYABLE
 #define NONCOPYABLE
-namespace tinyrpc {
+namespace highServer {
 
 class noncopyable {
 public:
@@ -12,6 +12,6 @@ protected:
     noncopyable() = default;
     ~noncopyable() = default;
 };
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* NONCOPYABLE */

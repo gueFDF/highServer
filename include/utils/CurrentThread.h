@@ -2,7 +2,7 @@
 #define CURRENTTHREAD
 #include "Thread.h"
 
-namespace tinyrpc {
+namespace highServer {
 extern __thread int t_cachedTid;
 
 /*用来记录当前线程的信息*/
@@ -15,6 +15,6 @@ inline int tid() {
 
     return t_cachedTid;
 }
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* CURRENTTHREAD */

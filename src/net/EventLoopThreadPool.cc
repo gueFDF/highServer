@@ -3,7 +3,7 @@
 #include <cassert>
 #include "EventLoop.h"
 #include "EventLoopThread.h"
-namespace tinyrpc {
+namespace highServer {
 
 EventLoopThreadPool::EventLoopThreadPool(EventLoop* baseLoop) :
     baseLoop_(baseLoop),
@@ -42,4 +42,4 @@ EventLoop* EventLoopThreadPool::getNextLoop() {
     return loop;
 }
 
-} // namespace tinyrpc
+} // namespace highServer

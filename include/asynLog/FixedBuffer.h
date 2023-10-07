@@ -11,7 +11,7 @@ FixedBuffer是父模板缓冲区
 #include <cstddef>
 #include <string>
 
-namespace tinyrpc {
+namespace highServer {
 
 // SIZE
 const int kSmallBuffer = 4000;
@@ -88,5 +88,5 @@ private:
     char data_[SIZE];
     char* cur_;
 };
-} // namespace tinyrpc
+} // namespace highServer
 #endif /* FIXEDBUFFER */

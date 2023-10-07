@@ -7,32 +7,32 @@
 #include <unistd.h>
 
 int cnt = 0;
-tinyrpc::EventLoop* g_loop;
-tinyrpc::TimerId aid;
+highServer::EventLoop* g_loop;
+highServer::TimerId aid;
 int count = 0;
 void printTid() {
-    printf("pid = %d, tid = %d\n", getpid(), tinyrpc::tid());
-    printf("now %s\n", tinyrpc::DateTime().toIsoString().c_str());
+    printf("pid = %d, tid = %d\n", getpid(), highServer::tid());
+    printf("now %s\n", highServer::DateTime().toIsoString().c_str());
 }
 
 void print(const char* msg) {
-    printf("msg %s %s\n", tinyrpc::DateTime().toIsoString().c_str(), msg);
+    printf("msg %s %s\n", highServer::DateTime().toIsoString().c_str(), msg);
     if (++cnt == 20) {
         g_loop->quit();
     }
 }
 
 void printc(const char* msg) {
-    printf("msg %s %s\n", tinyrpc::DateTime().toIsoString().c_str(), msg);
+    printf("msg %s %s\n", highServer::DateTime().toIsoString().c_str(), msg);
     if (++count == 6) {
         g_loop->cancel(aid);
     }
 }
 
 int main() {
-    // tinyrpc::Logger::setLogLevel(tinyrpc::Logger::TRACE);
+    // highServer::Logger::setLogLevel(highServer::Logger::TRACE);
     printTid();
-    tinyrpc::EventLoop loop;
+    highServer::EventLoop loop;
     g_loop = &loop;
 
     print("main");

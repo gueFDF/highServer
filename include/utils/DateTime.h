@@ -6,7 +6,7 @@
 
 #include <ctime>
 
-namespace tinyrpc {
+namespace highServer {
 struct date {
     int year = 0;   // [1900, 2500]
     int month = 0;  // [1, 12]
@@ -47,5 +47,5 @@ inline bool operator==(DateTime lhs, DateTime rhs) {
 inline bool operator>(DateTime lhs, DateTime rhs) {
     return lhs.gettime() > rhs.gettime();
 }
-} // namespace tinyrpc
+} // namespace highServer
 #endif /* TIMEZONE */

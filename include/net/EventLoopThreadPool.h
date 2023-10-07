@@ -8,7 +8,7 @@
 #include <memory>
 #include <mutex>
 #include <vector>
-namespace tinyrpc {
+namespace highServer {
 class EventLoop;
 
 class EventLoopThreadPool : noncopyable {
@@ -32,6 +32,6 @@ private:
     std::vector<EventLoop*> loops_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* EVENTLOOPTHREADPOOL */

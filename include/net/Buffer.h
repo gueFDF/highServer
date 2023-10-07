@@ -6,7 +6,7 @@
 #include <cstdio>
 #include <string>
 #include <vector>
-namespace tinyrpc {
+namespace highServer {
 
 class Buffer {
 public:
@@ -150,6 +150,6 @@ private:
     size_t writerIndex_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* NET */

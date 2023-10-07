@@ -8,7 +8,7 @@
 #include <string>
 #include "Buffer.h"
 #include "Callbacks.h"
-namespace tinyrpc {
+namespace highServer {
 class Channel;
 class EventLoop;
 class Socket;
@@ -96,6 +96,6 @@ private:
     Buffer outputBuffer_;
 };
 typedef std::shared_ptr<TcpConnection> TcpConnectionPtr;
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* TCPCONNECTION */

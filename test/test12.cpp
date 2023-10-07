@@ -4,7 +4,7 @@
 #include <cassert>
 #include <stdio.h>
 
-tinyrpc::EventLoop* g_loop;
+highServer::EventLoop* g_loop;
 
 void connectCallback(int sockfd) {
     printf("connected.\n");
@@ -12,10 +12,10 @@ void connectCallback(int sockfd) {
 }
 
 int main(int argc, char* argv[]) {
-    tinyrpc::EventLoop loop;
+    highServer::EventLoop loop;
     g_loop = &loop;
-    tinyrpc::InetAddress addr("127.0.0.1", 9981);
-    tinyrpc::ConnectorPtr connector(new tinyrpc::Connector(&loop, addr));
+    highServer::InetAddress addr("127.0.0.1", 9981);
+    highServer::ConnectorPtr connector(new highServer::Connector(&loop, addr));
     connector->setNewConnectionCallback(connectCallback);
     connector->start();
 

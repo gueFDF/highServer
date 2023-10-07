@@ -12,7 +12,7 @@
 #include <cstdio>
 #include <sys/types.h>
 #include <unistd.h>
-namespace tinyrpc {
+namespace highServer {
 TcpConnection::TcpConnection(EventLoop* loop,
                              const std::string& nameArg,
                              int sockfd,
@@ -179,4 +179,4 @@ void TcpConnection::shutdownInLoop() {
         socket_->shutdownWrite();
     }
 }
-} // namespace tinyrpc
+} // namespace highServer

@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <sys/timerfd.h>
 
-tinyrpc::EventLoop* g_loop;
+highServer::EventLoop* g_loop;
 
 void timeout() {
     printf("Timeout!\n");
@@ -14,12 +14,12 @@ void timeout() {
 }
 
 int main() {
-    tinyrpc::Logger::setLogLevel(tinyrpc::Logger::TRACE);
-    tinyrpc::EventLoop loop;
+    highServer::Logger::setLogLevel(highServer::Logger::TRACE);
+    highServer::EventLoop loop;
     g_loop = &loop;
 
     int timerfd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
-    tinyrpc::Channel channel(&loop, timerfd);
+    highServer::Channel channel(&loop, timerfd);
     channel.setReadCallback(timeout);
     channel.enableReading();
 

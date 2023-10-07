@@ -5,15 +5,15 @@
 #include <TimerId.h>
 void runInThread() {
     printf("runInThread(): pid = %d, tid = %d\n",
-           getpid(), tinyrpc::tid());
+           getpid(), highServer::tid());
 }
 
 int main() {
     printf("main(): pid = %d, tid = %d\n",
-           getpid(), tinyrpc::tid());
+           getpid(), highServer::tid());
 
-    tinyrpc::EventLoopThread loopThread;
-    tinyrpc::EventLoop* loop = loopThread.startLoop();
+    highServer::EventLoopThread loopThread;
+    highServer::EventLoop* loop = loopThread.startLoop();
     loop->runInLoop(runInThread);
     sleep(1);
     loop->runAfter(2, runInThread);

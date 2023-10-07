@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 #include <netinet/in.h>
-namespace tinyrpc {
+namespace highServer {
 class InetAddress {
 public:
     explicit InetAddress(uint16_t port);
@@ -28,6 +28,6 @@ private:
 struct sockaddr_in getLocalAddr(int sockfd);
 struct sockaddr_in getPeerAddr(int sockfd);
 bool isSelfConnect(int sockfd);
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* INETADDRESS */

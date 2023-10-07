@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16.3)
-project(tinyrpc C CXX)
+project(highServer C CXX)
 
 set(CMAKE_CXX_COMPILE  "/usr/bin/clang++")
 set(CXX_FLAGS

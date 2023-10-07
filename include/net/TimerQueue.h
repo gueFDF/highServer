@@ -7,7 +7,7 @@
 #include <vector>
 #include "Channel.h"
 #include "Callbacks.h"
-namespace tinyrpc {
+namespace highServer {
 class EventLoop;
 class Timer;
 class TimerId;
@@ -45,6 +45,6 @@ private:
     ActiveTimerSet cancelingTimers_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* TIMERQUEUE */

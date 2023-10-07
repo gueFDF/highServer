@@ -3,7 +3,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <sys/uio.h>
-namespace tinyrpc {
+namespace highServer {
 ssize_t Buffer::readFd(int fd, int* savedErrno) {
     char extrabuf[65536];
     struct iovec vec[2];
@@ -26,4 +26,4 @@ ssize_t Buffer::readFd(int fd, int* savedErrno) {
     return n;
 }
 
-} // namespace tinyrpc
+} // namespace highServer

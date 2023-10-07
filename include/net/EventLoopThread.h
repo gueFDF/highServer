@@ -3,7 +3,7 @@
 #include "Condition.h"
 #include "Thread.h"
 #include "noncopyable.h"
-namespace tinyrpc {
+namespace highServer {
 class EventLoop;
 
 // 一个eventloop线程类
@@ -22,6 +22,6 @@ private:
     Condition cond_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* EVENTLOOPTHREAD */

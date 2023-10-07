@@ -5,7 +5,7 @@
 #include <sys/epoll.h>
 #include "EventLoop.h"
 #include "Logging.h"
-namespace tinyrpc {
+namespace highServer {
 const int Channel::kNoneEvent = 0;
 const int Channel::kReadEvent = EPOLLIN | EPOLLPRI;
 const int Channel::kWriteEvent = EPOLLOUT;
@@ -51,4 +51,4 @@ void Channel::handleEvent() {
     eventHandling_ = false;
 }
 
-} // namespace tinyrpc
+} // namespace highServer

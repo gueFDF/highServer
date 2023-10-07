@@ -9,7 +9,7 @@
 #include "noncopyable.h"
 #include <sys/epoll.h>
 
-namespace tinyrpc {
+namespace highServer {
 
 class Channel;
 class EPoller : noncopyable {
@@ -38,5 +38,5 @@ private:
 
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 #endif /* EPOLLER */

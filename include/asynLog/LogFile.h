@@ -5,7 +5,7 @@
 #include "AppendFile.h"
 #include "noncopyable.h"
 #include <mutex>
-namespace tinyrpc {
+namespace highServer {
 
 class LogFile : noncopyable {
 public:
@@ -41,6 +41,6 @@ private:
     const static int kRollPerSeconds_ = 60 * 60 * 24; // 一天的秒数
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* LOGFILE */

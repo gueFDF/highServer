@@ -5,7 +5,7 @@
 #include <cassert>
 #include <mutex>
 #include <unistd.h>
-namespace tinyrpc {
+namespace highServer {
 
 LogFile::LogFile(
     const std::string& basename,
@@ -113,4 +113,4 @@ std::string LogFile::getLogFileName(const std::string& basename, time_t* now) {
     return filename;
 }
 
-} // namespace tinyrpc
+} // namespace highServer

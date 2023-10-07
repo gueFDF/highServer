@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #include <sys/types.h>
 
-namespace tinyrpc {
+namespace highServer {
 
 ino64_t getnanosecond() {
     struct timeval tv;
@@ -62,4 +62,4 @@ void DateTime::invalid() {
     nowtime = 0;
 }
 
-} // namespace tinyrpc
+} // namespace highServer

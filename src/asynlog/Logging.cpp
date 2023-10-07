@@ -2,7 +2,7 @@
 #include "DateTime.h"
 #include "CurrentThread.h"
 #include "Error_no.h"
-namespace tinyrpc {
+namespace highServer {
 
 __thread char t_time[64];     // 当前线程的时间字符串“年：月：日：时：分：秒”
 __thread time_t t_lastSecond; // 当前线程上一次日志记录时的秒数
@@ -117,4 +117,4 @@ Logger::~Logger() {
         abort();
     }
 }
-} // namespace tinyrpc
+} // namespace highServer

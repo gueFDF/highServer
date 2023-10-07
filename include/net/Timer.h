@@ -4,7 +4,7 @@
 #include "noncopyable.h"
 #include "Callbacks.h"
 #include <atomic>
-namespace tinyrpc {
+namespace highServer {
 
 class Timer : noncopyable {
 public:
@@ -42,6 +42,6 @@ private:
     static std::atomic_int64_t s_numCreated_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* TIMER */

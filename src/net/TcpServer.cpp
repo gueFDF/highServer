@@ -7,7 +7,7 @@
 #include <memory>
 #include "EventLoop.h"
 #include "EventLoopThreadPool.h"
-namespace tinyrpc {
+namespace highServer {
 
 class Acceptor;
 class EventLoop;
@@ -83,4 +83,4 @@ void TcpServer::removeConnectionInLoop(const TcpConnectionPtr& conn) {
         std::bind(&TcpConnection::connectDestroyed, conn));
 }
 
-} // namespace tinyrpc
+} // namespace highServer

@@ -4,7 +4,7 @@
 #include "DateTime.h"
 #include "LogStream.h"
 
-namespace tinyrpc {
+namespace highServer {
 
 class Logger {
 public:
@@ -76,5 +76,5 @@ inline Logger::LogLevel Logger::logLevel() {
 #define LOG_SYSERR Logger(__FILE__, __LINE__, false).stream()
 #define LOG_SYSFATAL Logger(__FILE__, __LINE__, true).stream()
 
-} // namespace tinyrpc
+} // namespace highServer
 #endif /* LOGGING */

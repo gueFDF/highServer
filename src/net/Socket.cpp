@@ -5,7 +5,7 @@
 #include "InetAddress.h"
 #include <netinet/tcp.h>
 #include "Logging.h"
-namespace tinyrpc {
+namespace highServer {
 
 int createNBListenSocket() {
     // 监听套接字使用非阻塞的原因是,防止accept阻塞
@@ -117,4 +117,4 @@ void Socket::shutdownWrite() {
     }
 }
 
-} // namespace tinyrpc
+} // namespace highServer

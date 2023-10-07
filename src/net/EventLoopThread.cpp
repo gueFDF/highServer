@@ -3,7 +3,7 @@
 #include <cassert>
 #include <cstdio>
 #include <mutex>
-namespace tinyrpc {
+namespace highServer {
 EventLoopThread::EventLoopThread() :
     loop_(NULL),
     exiting_(false),
@@ -45,4 +45,4 @@ void EventLoopThread::threadFunc() {
     assert(exiting_);
 }
 
-} // namespace tinyrpc
+} // namespace highServer

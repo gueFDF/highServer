@@ -7,7 +7,7 @@
 #include <functional>
 #include <mutex>
 
-namespace tinyrpc {
+namespace highServer {
 void removeConnection(EventLoop* loop, const TcpConnectionPtr& conn) {
     loop->queueInLoop(std::bind(&TcpConnection::connectDestroyed, conn));
 }
@@ -36,11 +36,11 @@ TcpClient::~TcpClient() {
     conn = connection_;
     mutex_.unlock();
     if (conn) {
-        CloseCallback cb = std::bind(&tinyrpc::removeConnection, loop_, std::placeholders::_1);
+        CloseCallback cb = std::bind(&highServer::removeConnection, loop_, std::placeholders::_1);
         loop_->runInLoop(std::bind(&TcpConnection::setCloseCallback, conn, cb));
     } else {
         connector_->stop();
-        loop_->runAfter(1, std::bind(&tinyrpc::removeConnector, connector_));
+        loop_->runAfter(1, std::bind(&highServer::removeConnector, connector_));
     }
 }
 
@@ -112,4 +112,4 @@ void TcpClient::removeConnection(const TcpConnectionPtr& conn) {
     }
 }
 
-} // namespace tinyrpc
+} // namespace highServer

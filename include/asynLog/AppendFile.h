@@ -4,7 +4,7 @@
 #include <cstdint>
 #include "noncopyable.h"
 #include <string>
-namespace tinyrpc {
+namespace highServer {
 
 class AppendFile : noncopyable {
 public:
@@ -30,6 +30,6 @@ private:
     off_t writtenBytes_;     // 已写日志数据的总字节数
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* FILEUTIL */

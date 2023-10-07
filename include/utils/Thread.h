@@ -7,7 +7,7 @@
 #include <string>
 #include <atomic>
 #include <future>
-namespace tinyrpc {
+namespace highServer {
 
 pid_t Gettid();
 class Thread : noncopyable {

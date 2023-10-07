@@ -3,7 +3,7 @@
 #include "Channel.h"
 #include "Socket.h"
 #include "noncopyable.h"
-namespace tinyrpc {
+namespace highServer {
 class EventLoop;
 class InetAddres;
 
@@ -31,6 +31,6 @@ private:
     bool listenning_;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 
 #endif /* ACCEPTOR */

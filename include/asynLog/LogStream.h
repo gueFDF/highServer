@@ -13,7 +13,7 @@ type -> string
 #include <string>
 #include <pcre_stringpiece.h>
 #include <cassert>
-namespace tinyrpc {
+namespace highServer {
 
 class LogStream : noncopyable {
     typedef LogStream self;
@@ -64,5 +64,5 @@ private:
     static const int kMaxNumericSize = 48;
 };
 
-} // namespace tinyrpc
+} // namespace highServer
 #endif /* LOGSTREAM */
