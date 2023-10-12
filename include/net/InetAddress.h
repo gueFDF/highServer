@@ -21,6 +21,10 @@ public:
         addr_ = addr;
     }
 
+    std::string toIp() const;
+    std::string toIpPort() const;
+    uint16_t toPort() const;
+
 private:
     struct sockaddr_in addr_;
 };
