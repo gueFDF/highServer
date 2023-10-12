@@ -101,7 +101,9 @@ void TcpConnection::connectEstablished() {
     assert(state_ == kConnecting);
     setState(kConnected);
     channel_->enableReading();
-    connectionCallback_(shared_from_this());
+    if (connectionCallback_) {
+        connectionCallback_(shared_from_this());
+    }
 }
 
 void TcpConnection::connectDestroyed() {
@@ -109,7 +111,9 @@ void TcpConnection::connectDestroyed() {
     assert(state_ == kConnected);
     setState(kDisconnected);
     channel_->disableAll();
-    connectionCallback_(shared_from_this());
+    if (connectionCallback_) {
+        connectionCallback_(shared_from_this());
+    }
     loop_->removeChannel(channel_.get());
 }
 
@@ -118,7 +122,9 @@ void TcpConnection::handleRead() {
     int savedErrno = 0;
     ssize_t n = inputBuffer_.readFd(channel_->fd(), &savedErrno);
     if (n > 0) {
-        messageCallback_(shared_from_this(), &inputBuffer_);
+        if (messageCallback_) {
+            messageCallback_(shared_from_this(), &inputBuffer_);
+        }
     } else if (n == 0) { // 关闭
         handleClose();
     } else {
@@ -157,7 +163,9 @@ void TcpConnection::handleClose() {
     LOG_TRACE << "TcpConnection::handleClose state = " << state_;
     assert(state_ == kConnected);
     channel_->disableAll();
-    closeCallback_(shared_from_this());
+    if (closeCallback_) {
+        closeCallback_(shared_from_this());
+    }
 }
 
 void TcpConnection::handleError() {

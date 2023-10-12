@@ -114,7 +114,6 @@ void Connector::connecting(int sockfd) {
 // 从loop中移除channel,并且将channel重置为nullptr
 int Connector::removeAndResetChannel() {
     channel_->disableAll();
-    loop_->removeChannel(channel_.get());
     int sockfd = channel_->fd();
     loop_->queueInLoop(std::bind(&Connector::resetChannel, this));
     return sockfd;

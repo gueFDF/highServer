@@ -86,7 +86,6 @@ void EPoller::removeChannel(Channel* channel) {
     assert(channel->isNoneEvent());
     int idx = channel->index();
     assert(idx == kAdded);
-
     // 还未在监听红黑树上删除
     if (idx == kAdded) {
         update(EPOLL_CTL_DEL, channel);

@@ -3,6 +3,7 @@
 #include <cerrno>
 #include <cstdint>
 #include <cstdio>
+#include <cstring>
 #include <netinet/in.h>
 #include <strings.h>
 #include <arpa/inet.h>
@@ -64,5 +65,26 @@ bool isSelfConnect(int sockfd) {
     struct sockaddr_in peeraddr = getPeerAddr(sockfd);
     return localaddr.sin_port == peeraddr.sin_port
            && localaddr.sin_addr.s_addr == peeraddr.sin_addr.s_addr;
+}
+
+std::string InetAddress::toIp() const {
+    char buf[64] = "";
+    ::inet_ntop(AF_INET, &addr_.sin_addr, buf, sizeof(buf));
+    return buf;
+}
+uint16_t InetAddress::toPort() const {
+    uint16_t port = ::be16toh(addr_.sin_port);
+    return port;
+}
+
+std::string InetAddress::toIpPort() const {
+    char buf[64] = "";
+    // 获取Ip
+    ::inet_ntop(AF_INET, &addr_.sin_addr, buf, sizeof(buf));
+    // Port
+    uint16_t port = ::be16toh(addr_.sin_port);
+
+    snprintf(buf + ::strlen(buf), sizeof(buf) - ::strlen(buf), ":%u", port);
+    return buf;
 }
 } // namespace highServer
